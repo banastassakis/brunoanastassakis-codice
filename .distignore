@@ -14,6 +14,8 @@ CHECKLIST-INSTALACAO.md
 docs/
 projetos-ia/
 output/
+test-results/
+playwright-report/
 bin/
 node_modules/
 vendor/
@@ -23,6 +25,12 @@ pnpm-lock.yaml
 composer.lock
 *.log
 *.map
+screenshot.png
+*.m4a
+*.mp3
+*.wav
+*.mp4
+*.mov
 *.zip
 *.tmp
 *.temp

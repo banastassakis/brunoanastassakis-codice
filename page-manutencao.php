@@ -30,17 +30,17 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 </a>
 
 <main id="conteudo" class="site-main maintenance-main" role="main" tabindex="-1">
-	<div class="container-reading">
+	<div class="container maintenance-layout">
 		<section class="maintenance-screen" aria-labelledby="maintenance-title">
 			<p class="maintenance-screen__label"><?php esc_html_e( 'Manutenção', 'codice' ); ?></p>
 			<h1 id="maintenance-title" class="maintenance-screen__title">
-				<?php esc_html_e( 'O site está sendo preparado.', 'codice' ); ?>
+				<?php esc_html_e( 'Este espaço está sendo preparado.', 'codice' ); ?>
 			</h1>
-			<p class="maintenance-screen__text">
-				<?php esc_html_e( 'Estou preparando este espaço. Fique à vontade para entrar em contato pelos canais abaixo.', 'codice' ); ?>
-			</p>
+			<h2 id="maintenance-contact-title" class="maintenance-screen__text">
+				<?php esc_html_e( 'Contatos:', 'codice' ); ?>
+			</h2>
 
-			<nav class="maintenance-contact" aria-label="<?php esc_attr_e( 'Canais de contato', 'codice' ); ?>">
+			<div class="maintenance-contact" aria-labelledby="maintenance-contact-title">
 				<ul class="maintenance-contact__list list-bare">
 					<li class="maintenance-contact__item">
 						<a class="maintenance-contact__link" href="<?php echo esc_url( 'mailto:contato@brunoanastassakis.com' ); ?>">
@@ -48,7 +48,8 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 								<path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="1.5" />
 								<path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.5" />
 							</svg>
-							<span><?php esc_html_e( 'Email', 'codice' ); ?></span>
+							<span><?php esc_html_e( 'E-mail:', 'codice' ); ?></span>
+							<span>contato@brunoanastassakis.com</span>
 						</a>
 					</li>
 					<li class="maintenance-contact__item">
@@ -56,7 +57,8 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 							<svg class="maintenance-contact__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
 								<path d="M5 9h3v10H5zM5 5h3v3H5zM11 9h3v2a3 3 0 0 1 5 2v6h-3v-5a2 2 0 0 0-2-2v7h-3z" fill="currentColor" />
 							</svg>
-							<span><?php esc_html_e( 'LinkedIn', 'codice' ); ?></span>
+							<span><?php esc_html_e( 'LinkedIn:', 'codice' ); ?></span>
+							<span>linkedin.com/in/brunoanastassakis</span>
 						</a>
 					</li>
 					<li class="maintenance-contact__item">
@@ -66,12 +68,23 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 								<path d="M9 8c1 4 3 6 7 7" fill="none" stroke="currentColor" stroke-width="1.5" />
 								<path d="M10 8h2l1 2-1 1" fill="none" stroke="currentColor" stroke-width="1.5" />
 							</svg>
-							<span><?php esc_html_e( 'WhatsApp', 'codice' ); ?></span>
+							<span><?php esc_html_e( 'WhatsApp:', 'codice' ); ?></span>
+							<span>+55 21 986957214</span>
 						</a>
 					</li>
 				</ul>
-			</nav>
+			</div>
 		</section>
+		<figure class="maintenance-visual">
+			<img
+				src="<?php echo esc_url( get_template_directory_uri() . '/assets/img/maintenance-retroprint.svg' ); ?>"
+				width="640"
+				height="760"
+				alt="<?php esc_attr_e( 'Composição editorial retroprint com camadas de papel e formas de organização visual, sugerindo um espaço em preparação.', 'codice' ); ?>"
+				loading="eager"
+				decoding="async"
+			>
+		</figure>
 	</div>
 </main>
 
