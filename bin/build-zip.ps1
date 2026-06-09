@@ -15,6 +15,7 @@ $RequiredFiles = @(
 	'style.css',
 	'functions.php',
 	'index.php',
+	'theme.json',
 	'assets/css/tokens.css',
 	'.distignore'
 )
@@ -214,9 +215,60 @@ try {
 		}
 	}
 
+	$ValidationRoot = Join-Path $TempRoot 'validation'
+	New-Item -ItemType Directory -Path $ValidationRoot | Out-Null
+	[System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $ValidationRoot)
+
+	$ExtractedTheme = Join-Path $ValidationRoot $ThemeSlug
+	if (-not (Test-Path -LiteralPath $ExtractedTheme -PathType Container)) {
+		throw "ZIP extraction did not create the required top-level directory: $ThemeSlug/"
+	}
+
+	$UnexpectedTopLevelItems = @(
+		Get-ChildItem -LiteralPath $ValidationRoot -Force |
+			Where-Object { $_.Name -ne $ThemeSlug }
+	)
+	if ($UnexpectedTopLevelItems.Count -gt 0) {
+		throw "ZIP extraction created unexpected top-level entries: $($UnexpectedTopLevelItems.Name -join ', ')"
+	}
+
+	$ExtractedRequiredFiles = @(
+		'style.css',
+		'functions.php',
+		'index.php'
+	)
+	foreach ($ExtractedRequiredFile in $ExtractedRequiredFiles) {
+		$ExtractedPath = Join-Path $ExtractedTheme $ExtractedRequiredFile
+		if (-not (Test-Path -LiteralPath $ExtractedPath -PathType Leaf)) {
+			throw "Extracted ZIP is missing required theme file: $ThemeSlug/$ExtractedRequiredFile"
+		}
+	}
+
+	$ExtractedStyle = Join-Path $ExtractedTheme 'style.css'
+	$StyleHeader = Get-Content -LiteralPath $ExtractedStyle -Raw
+	if ($StyleHeader -notmatch '(?m)^\s*Theme Name\s*:') {
+		throw "Extracted style.css is missing the required WordPress Theme Name header."
+	}
+
+	$PhpCommand = Get-Command php -ErrorAction SilentlyContinue
+	if (-not $PhpCommand) {
+		throw "PHP CLI was not found; cannot validate packaged PHP files with php -l."
+	}
+
+	$PackagedPhpFiles = @(
+		Get-ChildItem -LiteralPath $ExtractedTheme -Recurse -Force -File -Filter '*.php'
+	)
+	foreach ($PhpFile in $PackagedPhpFiles) {
+		$PhpOutput = & $PhpCommand.Source -l $PhpFile.FullName 2>&1
+		if ($LASTEXITCODE -ne 0) {
+			throw "php -l failed for $($PhpFile.FullName): $PhpOutput"
+		}
+	}
+
 	$EntryCount = (Get-ChildItem -LiteralPath $StageTheme -Recurse -Force -File).Count
 	Write-Host "Created $ZipPath"
 	Write-Host "Packaged $EntryCount files under $ThemeSlug/"
+	Write-Host "Validated extracted package and php -l for $($PackagedPhpFiles.Count) PHP files"
 } finally {
 	if (Test-Path -LiteralPath $TempRoot) {
 		Remove-Item -LiteralPath $TempRoot -Recurse -Force
