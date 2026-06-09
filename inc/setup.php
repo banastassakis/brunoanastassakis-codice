@@ -78,7 +78,7 @@ function codice_nav_fallback() {
 	?>
 	<ul class="site-nav__list site-nav__list--fallback">
 		<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Início', 'codice' ); ?></a></li>
-		<li><a href="<?php echo esc_url( home_url( '/?post_type=post' ) ); ?>"><?php esc_html_e( 'Artigos', 'codice' ); ?></a></li>
+		<li><a href="<?php echo esc_url( function_exists( 'codice_get_posts_index_url' ) ? codice_get_posts_index_url() : home_url( '/artigos/' ) ); ?>"><?php esc_html_e( 'Artigos', 'codice' ); ?></a></li>
 		<li><a href="<?php echo esc_url( home_url( '/sobre' ) ); ?>"><?php esc_html_e( 'Sobre', 'codice' ); ?></a></li>
 		<li><a href="<?php echo esc_url( home_url( '/contato' ) ); ?>"><?php esc_html_e( 'Contato', 'codice' ); ?></a></li>
 	</ul>

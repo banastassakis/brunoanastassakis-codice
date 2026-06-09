@@ -5,9 +5,8 @@
  * Template do WordPress para posts individuais. Exibe:
  * categoria + data (metadados mono); título (h1 único);
  * subtítulo/resumo quando houver excerpt manual; imagem destacada opcional;
- * corpo via content-single.php; leitura relacionada via related-posts.php.
- *
- * Captação Substack: não implementada nesta etapa (Etapa 5).
+ * corpo via content-single.php; leitura relacionada via related-posts.php;
+ * captação Substack nativa ao final.
  *
  * Regras Códice:
  * - Um único <h1> por página.
@@ -61,7 +60,7 @@ get_header();
 					</p>
 
 					<!-- ── Título: único h1 da página ─────────────────────── -->
-					<h1 class="entry-header__title"><?php the_title(); ?></h1>
+					<h1 class="entry-header__title"><?php echo esc_html( get_the_title() ); ?></h1>
 
 					<?php
 					// ── Subtítulo / resumo: apenas quando há excerpt manual ──
@@ -78,14 +77,25 @@ get_header();
 				// Só renderiza se existir; sem placeholder falso.
 				// loading="eager" na imagem de abertura (acima da dobra).
 				if ( has_post_thumbnail() ) :
+					$thumbnail_id  = get_post_thumbnail_id();
+					$thumbnail_alt = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
+					if ( empty( $thumbnail_alt ) ) {
+						$thumbnail_alt = sprintf(
+							/* translators: %s: título do artigo */
+							__( 'Imagem editorial retroprint do artigo: %s', 'codice' ),
+							get_the_title()
+						);
+					}
 					?>
 					<div class="entry-thumbnail">
 						<?php
 						the_post_thumbnail(
 							'large',
 							array(
-								'class'   => 'entry-thumbnail__img',
-								'loading' => 'eager',
+								'class'    => 'entry-thumbnail__img',
+								'loading'  => 'eager',
+								'decoding' => 'async',
+								'alt'      => $thumbnail_alt,
 							)
 						);
 						?>
@@ -103,8 +113,14 @@ get_header();
 			<?php get_template_part( 'template-parts/related-posts' ); ?>
 
 			<?php
-			// Área reservada para captação Substack (Etapa 5).
-			// Não gera markup visual aqui para não criar layout quebrado.
+			get_template_part(
+				'template-parts/newsletter-substack',
+				null,
+				array(
+					'context' => 'inline',
+					'form_id' => 'codice-newsletter-single',
+				)
+			);
 
 		else :
 			// ── Fallback: post não encontrado ───────────────────────────────

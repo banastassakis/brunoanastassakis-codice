@@ -37,19 +37,6 @@ function codice_contact_form_render( $args = array() ) {
 	$status = isset( $_GET['contact'] ) ? sanitize_key( $_GET['contact'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$code   = isset( $_GET['code'] )    ? sanitize_key( $_GET['code'] )    : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-	// Preserva os valores do formulário em caso de erro de validação
-	// via transiente para não expor dados na URL.
-	$transient_key  = 'codice_form_data_' . get_current_user_id() . '_' . session_id();
-	$saved_data     = get_transient( $transient_key );
-	if ( $saved_data ) {
-		delete_transient( $transient_key );
-	}
-
-	$val_name    = ( $saved_data && isset( $saved_data['name'] ) )    ? esc_attr( $saved_data['name'] )    : '';
-	$val_email   = ( $saved_data && isset( $saved_data['email'] ) )   ? esc_attr( $saved_data['email'] )   : '';
-	$val_subject = ( $saved_data && isset( $saved_data['subject'] ) ) ? esc_attr( $saved_data['subject'] ) : '';
-	$val_message = ( $saved_data && isset( $saved_data['message'] ) ) ? esc_textarea( $saved_data['message'] ) : '';
-
 	?>
 	<?php if ( 'ok' === $status ) : ?>
 		<div class="form-feedback form-feedback--success" role="status" tabindex="-1">
@@ -66,7 +53,7 @@ function codice_contact_form_render( $args = array() ) {
 				'falha'   => esc_html__( 'Não foi possível enviar a mensagem. Tente mais tarde.', 'codice' ),
 			);
 			$msg = isset( $messages[ $code ] ) ? $messages[ $code ] : esc_html__( 'Ocorreu um erro. Por favor, tente novamente.', 'codice' );
-			echo '<p>' . $msg . '</p>'; // $msg já escapado acima.
+			echo '<p>' . esc_html( $msg ) . '</p>';
 			?>
 		</div>
 	<?php endif; ?>
@@ -105,7 +92,7 @@ function codice_contact_form_render( $args = array() ) {
 				type="text"
 				id="contact-name"
 				name="codice_name"
-				value="<?php echo esc_attr( $val_name ); ?>"
+				value=""
 				required
 				autocomplete="name"
 				aria-required="true"
@@ -120,7 +107,7 @@ function codice_contact_form_render( $args = array() ) {
 				type="email"
 				id="contact-email"
 				name="codice_email"
-				value="<?php echo esc_attr( $val_email ); ?>"
+				value=""
 				required
 				autocomplete="email"
 				aria-required="true"
@@ -135,7 +122,7 @@ function codice_contact_form_render( $args = array() ) {
 				type="text"
 				id="contact-subject"
 				name="codice_subject"
-				value="<?php echo esc_attr( $val_subject ); ?>"
+				value=""
 				required
 				aria-required="true"
 			>
@@ -151,7 +138,7 @@ function codice_contact_form_render( $args = array() ) {
 				rows="7"
 				required
 				aria-required="true"
-			><?php echo esc_textarea( $val_message ); ?></textarea>
+			></textarea>
 		</div>
 
 		<div class="contact-form__submit">
@@ -178,9 +165,10 @@ add_action( 'admin_post_codice_contact_send',        'codice_contact_handle_subm
 function codice_contact_handle_submission() {
 
 	// URL de redirecionamento — validada como URL relativa ao site.
-	$redirect_url = ! empty( $_POST['codice_redirect_url'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$posted_redirect_url = ! empty( $_POST['codice_redirect_url'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		? esc_url_raw( wp_unslash( $_POST['codice_redirect_url'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		: get_permalink( get_page_by_path( 'contato' ) );
+		: '';
+	$redirect_url = wp_validate_redirect( $posted_redirect_url, home_url( '/contato/' ) );
 
 	// Fallback absoluto de segurança.
 	if ( ! $redirect_url ) {
@@ -193,7 +181,7 @@ function codice_contact_handle_submission() {
 	 */
 	if (
 		! isset( $_POST['codice_contact_nonce'] ) ||
-		! wp_verify_nonce( sanitize_key( $_POST['codice_contact_nonce'] ), 'codice_contact_send' )
+		! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['codice_contact_nonce'] ) ), 'codice_contact_send' )
 	) {
 		wp_safe_redirect( add_query_arg( array( 'contact' => 'erro', 'code' => 'nonce' ), $redirect_url ) );
 		exit;
@@ -202,7 +190,7 @@ function codice_contact_handle_submission() {
 	/**
 	 * Honeypot anti-spam: campo deve estar vazio.
 	 */
-	$honeypot = isset( $_POST['codice_hp'] ) ? wp_unslash( $_POST['codice_hp'] ) : '';
+	$honeypot = isset( $_POST['codice_hp'] ) ? sanitize_text_field( wp_unslash( $_POST['codice_hp'] ) ) : '';
 	if ( ! empty( $honeypot ) ) {
 		wp_safe_redirect( add_query_arg( array( 'contact' => 'erro', 'code' => 'spam' ), $redirect_url ) );
 		exit;
@@ -238,7 +226,11 @@ function codice_contact_handle_submission() {
 	 *
 	 * Uso: add_filter( 'codice_contact_form_recipient', function() { return 'contato@brunoanastassakis.com'; } );
 	 */
-	$recipient = apply_filters( 'codice_contact_form_recipient', get_option( 'admin_email' ) );
+	$recipient = apply_filters(
+		'codice_contact_form_recipient',
+		function_exists( 'codice_get_contact_email' ) ? codice_get_contact_email() : get_option( 'admin_email' )
+	);
+	$recipient = sanitize_email( $recipient );
 
 	// Garante que o destinatário é um e-mail válido.
 	if ( ! is_email( $recipient ) ) {
@@ -254,7 +246,7 @@ function codice_contact_handle_submission() {
 	$mail_subject = sprintf(
 		/* translators: 1: nome do remetente, 2: assunto */
 		esc_html__( 'Contato — %1$s: %2$s', 'codice' ),
-		$name,
+		str_replace( array( "\r", "\n" ), ' ', $name ),
 		$subject
 	);
 
@@ -266,7 +258,7 @@ function codice_contact_handle_submission() {
 
 	$mail_headers = array(
 		'Content-Type: text/plain; charset=UTF-8',
-		'Reply-To: ' . $name . ' <' . $email . '>',
+		'Reply-To: ' . str_replace( array( "\r", "\n" ), ' ', $name ) . ' <' . $email . '>',
 	);
 
 	/**

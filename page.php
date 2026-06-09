@@ -20,10 +20,10 @@ get_header();
 
 			$hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_should_hide_page_title( get_the_ID() );
 			?>
-			<article id="post-<?php the_ID(); ?>" <?php post_class( 'page-generic' ); ?>>
+			<article id="post-<?php echo esc_attr( get_the_ID() ); ?>" <?php post_class( 'page-generic' ); ?>>
 				<header class="entry-header">
 					<h1 class="<?php echo esc_attr( $hide_title ? 'entry-header__title sr-only' : 'entry-header__title' ); ?>">
-						<?php the_title(); ?>
+						<?php echo esc_html( get_the_title() ); ?>
 					</h1>
 				</header>
 

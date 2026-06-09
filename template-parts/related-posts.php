@@ -101,12 +101,13 @@ if ( empty( $related_posts ) ) {
 
 ?>
 
-<aside class="related-posts" aria-label="<?php esc_attr_e( 'Leitura relacionada', 'codice' ); ?>">
+<aside class="related-posts" aria-labelledby="related-posts-heading">
 
 	<hr class="section-divider" aria-hidden="true">
 
 	<header class="related-posts__header">
 		<span class="section-label"><?php esc_html_e( 'Leitura relacionada', 'codice' ); ?></span>
+		<h2 id="related-posts-heading" class="sr-only"><?php esc_html_e( 'Leitura relacionada', 'codice' ); ?></h2>
 	</header>
 
 	<ul class="related-posts__list posts-list" role="list">

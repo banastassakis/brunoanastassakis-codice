@@ -17,6 +17,10 @@ get_header();
 
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
 	<div class="container">
+		<header class="archive-header">
+			<span class="section-label"><?php esc_html_e( 'Publicação', 'codice' ); ?></span>
+			<h1 class="archive-header__title"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></h1>
+		</header>
 
 		<?php if ( have_posts() ) : ?>
 
@@ -28,7 +32,7 @@ get_header();
 					?>
 
 					<li class="post-item">
-						<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+						<article id="post-<?php echo esc_attr( get_the_ID() ); ?>" <?php post_class(); ?>>
 
 							<header class="post-item__header">
 
@@ -49,8 +53,8 @@ get_header();
 								</p>
 
 								<h2 class="post-item__title">
-									<a href="<?php the_permalink(); ?>">
-										<?php the_title(); ?>
+									<a href="<?php echo esc_url( get_permalink() ); ?>">
+										<?php echo esc_html( get_the_title() ); ?>
 									</a>
 								</h2>
 
@@ -58,11 +62,11 @@ get_header();
 
 							<?php if ( has_excerpt() || get_the_excerpt() ) : ?>
 								<div class="post-item__excerpt">
-									<?php the_excerpt(); ?>
+									<?php echo wp_kses_post( wpautop( get_the_excerpt() ) ); ?>
 								</div>
 							<?php endif; ?>
 
-							<a class="post-item__read-more" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: título do post */ __( 'Ler: %s', 'codice' ), get_the_title() ) ); ?>">
+							<a class="post-item__read-more" href="<?php echo esc_url( get_permalink() ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: título do post */ __( 'Ler: %s', 'codice' ), get_the_title() ) ); ?>">
 								<?php esc_html_e( 'Ler artigo', 'codice' ); ?>
 							</a>
 
@@ -77,8 +81,8 @@ get_header();
 			// Paginação numérica (será estilizada na Etapa 2).
 			the_posts_pagination(
 				array(
-					'prev_text' => esc_html__( '&larr; Anterior', 'codice' ),
-					'next_text' => esc_html__( 'Próximo &rarr;', 'codice' ),
+					'prev_text' => esc_html__( '← Anterior', 'codice' ),
+					'next_text' => esc_html__( 'Próximo →', 'codice' ),
 				)
 			);
 			?>
@@ -86,9 +90,9 @@ get_header();
 		<?php else : ?>
 
 			<div class="empty-state" role="status">
-				<h1 class="empty-state__title">
+				<p class="empty-state__title">
 					<?php esc_html_e( 'Nenhum conteúdo publicado ainda.', 'codice' ); ?>
-				</h1>
+				</p>
 				<p class="empty-state__text">
 					<?php esc_html_e( 'Os artigos aparecerão aqui assim que forem publicados.', 'codice' ); ?>
 				</p>

@@ -1239,7 +1239,7 @@ label {
 	min-height: 0;
 	height:     100%;
 	max-height: 100%;
-	background: var(--graphite);
+	background: var(--dustcover);
 	overflow:   hidden;
 }
 
@@ -1480,7 +1480,7 @@ figure img {
 
 	.maintenance-layout {
 		grid-template-columns: 1fr;
-		grid-template-rows: minmax(0, 1fr) clamp(10rem, 32svh, 18rem);
+		grid-template-rows: minmax(0, 1fr) clamp(8rem, 28svh, 15rem);
 	}
 
 	.maintenance-screen {
@@ -2490,11 +2490,12 @@ a.cat-filter__link:focus-visible {
 
 /* Honeypot escondido de forma acessível mas invisível a humanos */
 .contact-form__honeypot {
-	display:  none !important;
 	position: absolute;
-	width:    0;
-	height:   0;
+	inset-inline-start: -100vw;
+	width:    1px;
+	height:   1px;
 	overflow: hidden;
+	clip:     rect(0 0 0 0);
 }
 
 /* Retornos e alertas de feedback */

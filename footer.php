@@ -15,7 +15,7 @@
 			<?php
 			printf(
 				/* translators: 1: nome do site, 2: ano atual */
-				esc_html__( '%1$s &copy; %2$s', 'codice' ),
+				esc_html__( '%1$s © %2$s', 'codice' ),
 				esc_html( get_bloginfo( 'name' ) ),
 				esc_html( gmdate( 'Y' ) )
 			);

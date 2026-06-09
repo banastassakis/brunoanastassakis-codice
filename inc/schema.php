@@ -20,32 +20,49 @@ function codice_add_schema_json_ld() {
 		return;
 	}
 
+	if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
+		return;
+	}
+
 	$schema = array();
+	$site_url = home_url( '/' );
+	$site_name = get_bloginfo( 'name' );
+	$linkedin_url = function_exists( 'codice_get_linkedin_url' ) ? codice_get_linkedin_url() : '';
 
 	$person = array(
 		'@context' => 'https://schema.org',
 		'@type'    => 'Person',
-		'name'     => 'Bruno Anastassakis',
-		'url'      => home_url( '/' ),
-		'sameAs'   => array( 'https://linkedin.com/in/brunoanastassakis' ),
+		'@id'      => $site_url . '#person',
+		'name'     => $site_name,
+		'url'      => $site_url,
 	);
 
-	if ( is_front_page() || is_home() ) {
-		$website = array(
-			'@context'        => 'https://schema.org',
-			'@type'           => 'WebSite',
-			'name'            => get_bloginfo( 'name' ),
-			'url'             => home_url( '/' ),
-			'description'     => esc_html__( 'Publicação editorial autoral sobre comunicação, tecnologia e produto.', 'codice' ),
-			'potentialAction' => array(
-				'@type'       => 'SearchAction',
-				'target'      => home_url( '/?s={search_term_string}' ),
-				'query-input' => 'required name=search_term_string',
-			),
-		);
-		$schema[] = $website;
-		$schema[] = $person;
+	if ( $linkedin_url ) {
+		$person['sameAs'] = array( $linkedin_url );
 	}
+
+	$website_description = wp_strip_all_tags( get_bloginfo( 'description' ) );
+	if ( empty( $website_description ) ) {
+		$website_description = esc_html__( 'Publicação editorial autoral sobre conteúdo, comunicação, eventos, IA e ecossistema editorial.', 'codice' );
+	}
+
+	$schema[] = array(
+		'@context'        => 'https://schema.org',
+		'@type'           => 'WebSite',
+		'@id'             => $site_url . '#website',
+		'name'            => $site_name,
+		'url'             => $site_url,
+		'description'     => $website_description,
+		'publisher'       => array(
+			'@id' => $site_url . '#person',
+		),
+		'potentialAction' => array(
+			'@type'       => 'SearchAction',
+			'target'      => home_url( '/?s={search_term_string}' ),
+			'query-input' => 'required name=search_term_string',
+		),
+	);
+	$schema[] = $person;
 
 	if ( is_single() ) {
 		global $post;
@@ -60,14 +77,16 @@ function codice_add_schema_json_ld() {
 		$article = array(
 			'@context'         => 'https://schema.org',
 			'@type'            => 'BlogPosting',
+			'@id'              => get_permalink() . '#article',
 			'headline'         => get_the_title(),
 			'description'      => $description,
 			'datePublished'    => get_the_date( 'c' ),
 			'dateModified'     => get_the_modified_date( 'c' ),
 			'author'           => array(
-				'@type' => 'Person',
-				'name'  => get_the_author(),
-				'url'   => home_url( '/sobre' ),
+				'@id' => $site_url . '#person',
+			),
+			'publisher'        => array(
+				'@id' => $site_url . '#person',
 			),
 			'mainEntityOfPage' => array(
 				'@type' => 'WebPage',
@@ -85,6 +104,54 @@ function codice_add_schema_json_ld() {
 		}
 
 		$schema[] = $article;
+	}
+
+	$breadcrumbs = array(
+		array(
+			'name' => esc_html__( 'Início', 'codice' ),
+			'url'  => $site_url,
+		),
+	);
+
+	if ( is_single() ) {
+		$posts_url = function_exists( 'codice_get_posts_index_url' ) ? codice_get_posts_index_url() : home_url( '/artigos/' );
+		$breadcrumbs[] = array(
+			'name' => esc_html__( 'Artigos', 'codice' ),
+			'url'  => $posts_url,
+		);
+		$breadcrumbs[] = array(
+			'name' => get_the_title(),
+			'url'  => get_permalink(),
+		);
+	} elseif ( is_category() ) {
+		$breadcrumbs[] = array(
+			'name' => single_cat_title( '', false ),
+			'url'  => get_category_link( get_queried_object_id() ),
+		);
+	} elseif ( is_search() ) {
+		$breadcrumbs[] = array(
+			'name' => esc_html__( 'Busca', 'codice' ),
+			'url'  => add_query_arg( 's', rawurlencode( get_search_query() ), $site_url ),
+		);
+	}
+
+	if ( count( $breadcrumbs ) > 1 ) {
+		$schema[] = array(
+			'@context'        => 'https://schema.org',
+			'@type'           => 'BreadcrumbList',
+			'itemListElement' => array_map(
+				static function ( $item, $index ) {
+					return array(
+						'@type'    => 'ListItem',
+						'position' => $index + 1,
+						'name'     => $item['name'],
+						'item'     => $item['url'],
+					);
+				},
+				$breadcrumbs,
+				array_keys( $breadcrumbs )
+			),
+		);
 	}
 
 	if ( ! empty( $schema ) ) {

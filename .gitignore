@@ -5,6 +5,9 @@ Thumbs.db
 node_modules/
 vendor/
 /tmp/
+output/
+test-results/
+playwright-report/
 *.zip
 *.map
 .vscode/

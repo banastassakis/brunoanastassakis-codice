@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_should_hide_page_title( get_the_ID() );
+$contato_page = get_page_by_path( 'contato' );
+$contato_url  = $contato_page ? get_permalink( $contato_page ) : home_url( '/contato/' );
+$linkedin_url = function_exists( 'codice_get_linkedin_url' ) ? codice_get_linkedin_url() : '';
 ?>
 
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
@@ -24,7 +27,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 		<article class="page-sobre">
 			<header class="entry-header">
 				<span class="meta entry-header__label"><?php esc_html_e( 'Autor', 'codice' ); ?></span>
-				<h1 class="<?php echo esc_attr( $hide_title ? 'entry-header__title sr-only' : 'entry-header__title' ); ?>"><?php the_title(); ?></h1>
+				<h1 class="<?php echo esc_attr( $hide_title ? 'entry-header__title sr-only' : 'entry-header__title' ); ?>"><?php echo esc_html( get_the_title() ); ?></h1>
 			</header>
 
 			<div class="entry-content">
@@ -36,7 +39,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p class="lede">
 						<?php
 						esc_html_e(
-							'Escrevo sobre conteúdo, comunicação, eventos, inteligência artificial e os ecossistemas que organizam a operação editorial.',
+							'Texto provisório para a página Sobre da publicação editorial.',
 							'codice'
 						);
 						?>
@@ -44,7 +47,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'Este espaço funciona como um registro ativo de ideias, análises e reflexões estruturadas sobre a intersecção de comunicação, tecnologia e produto. Menos um currículo estático e mais uma ferramenta de interlocução.',
+							'A versão final será escrita na etapa de conteúdo, com foco no lugar de autoria, nos temas da publicação e no escopo de atuação, sem transformar a página em currículo, portfólio ou vitrine comercial.',
 							'codice'
 						);
 						?>
@@ -62,7 +65,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'Acredito que conteúdo precisa ser tratado como produto editorial: estrutura, acervo, governança, experiência e ciclo de vida. Comunicação, nesse contexto, é linguagem pública e construção de autoridade em mercados complexos, não apenas tática de campanha ou performance.',
+							'Esta seção reservará a tese editorial do site: a relação entre conteúdo, comunicação, eventos, IA e ecossistemas editoriais como campo de pensamento.',
 							'codice'
 						);
 						?>
@@ -70,7 +73,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'A tecnologia — incluindo inteligência artificial e automação — deve ser compreendida como uma camada operacional e de repetição. Ela é governada para reduzir o ruído informacional e otimizar processos, sem que o hype obscureça o rigor intelectual ou as prioridades organizacionais.',
+							'O texto definitivo deve manter tom sóbrio, evitar promessas de performance e tratar tecnologia como camada de método, não como argumento promocional.',
 							'codice'
 						);
 						?>
@@ -88,7 +91,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'Com cerca de 15 anos de atuação profissional acumulados entre Portugal e Brasil, minha trajetória desenvolve-se na convergência entre comunicação institucional, design de produtos digitais, curadoria de eventos corporativos e operações de marketing estratégico.',
+							'A trajetória será resumida em texto corrido na etapa de conteúdo real, com atenção ao escopo de atuação e sem lista cronológica de cargos.',
 							'codice'
 						);
 						?>
@@ -96,7 +99,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'Trabalho na estruturação de fluxos de produção, na coordenação de stakeholders em ambientes complexos e no desenho de experiências de leitura e relacionamento que geram credibilidade e constroem pontes intelectuais.',
+							'Até lá, este bloco permanece como placeholder para validar ritmo, largura de leitura e hierarquia visual da página.',
 							'codice'
 						);
 						?>
@@ -156,7 +159,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'Atualmente, atuo na liderança de operações e no direcionamento de canais de conteúdo para públicos B2B de alta complexidade. Coordeno iniciativas de educação corporativa, curadoria de grandes painéis de mercado e governança de plataformas de comunicação digital voltadas à geração de pensamento crítico e relacionamentos duráveis.',
+							'A prova profissional será discreta e descritiva, limitada ao escopo de atuação que fizer sentido para a publicação.',
 							'codice'
 						);
 						?>
@@ -164,7 +167,7 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					<p>
 						<?php
 						esc_html_e(
-							'Para consultar o histórico nominal completo, com listagem de cargos e passagens por organizações, recomendo acessar meu perfil profissional externo.',
+							'Detalhes nominais, quando necessários, devem permanecer em perfis externos e materiais profissionais próprios.',
 							'codice'
 						);
 						?>
@@ -178,10 +181,12 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 				// LinkedIn, CV e Contato.
 				?>
 				<section class="sobre-section sobre-section--links flex flex-wrap gap-md">
-					<a href="https://linkedin.com/in/brunoanastassakis" class="btn" target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'Perfil no LinkedIn', 'codice' ); ?>
-					</a>
-					<a href="<?php echo esc_url( get_permalink( get_page_by_path( 'contato' ) ) ); ?>" class="btn btn-ghost">
+					<?php if ( $linkedin_url ) : ?>
+						<a href="<?php echo esc_url( $linkedin_url ); ?>" class="btn" target="_blank" rel="noopener noreferrer">
+							<?php esc_html_e( 'Perfil no LinkedIn', 'codice' ); ?>
+						</a>
+					<?php endif; ?>
+					<a href="<?php echo esc_url( $contato_url ); ?>" class="btn btn-ghost">
 						<?php esc_html_e( 'Iniciar conversa', 'codice' ); ?>
 					</a>
 				</section>

@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_should_hide_page_title( get_the_ID() );
+$contact_email = function_exists( 'codice_get_contact_email' ) ? codice_get_contact_email() : get_option( 'admin_email' );
+$linkedin_url  = function_exists( 'codice_get_linkedin_url' ) ? codice_get_linkedin_url() : '';
 ?>
 
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
@@ -24,13 +26,13 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 		<article class="page-contato">
 			<header class="entry-header">
 				<span class="meta entry-header__label"><?php esc_html_e( 'Conversa', 'codice' ); ?></span>
-				<h1 class="<?php echo esc_attr( $hide_title ? 'entry-header__title sr-only' : 'entry-header__title' ); ?>"><?php the_title(); ?></h1>
+				<h1 class="<?php echo esc_attr( $hide_title ? 'entry-header__title sr-only' : 'entry-header__title' ); ?>"><?php echo esc_html( get_the_title() ); ?></h1>
 				<p class="lede">
 					<?php
-					esc_html_e(
-						'Utilize este espaço para propor discussões, questionamentos ou parcerias institucionais. O diálogo é conduzido de forma direta e consultiva.',
-						'codice'
-					);
+						esc_html_e(
+							'Utilize este espaço para propor discussões, questionamentos ou conversas relacionadas aos temas da publicação.',
+							'codice'
+						);
 					?>
 				</p>
 			</header>
@@ -66,18 +68,22 @@ $hide_title = function_exists( 'codice_should_hide_page_title' ) && codice_shoul
 					</p>
 
 					<ul class="contato-alternativo__list list-bare">
-						<li class="mb-xs font-mono meta">
-							<?php esc_html_e( 'E-mail:', 'codice' ); ?>
-							<a href="mailto:contato@brunoanastassakis.com" class="link-plain">
-								contato@brunoanastassakis.com
-							</a>
-						</li>
-						<li class="font-mono meta">
-							<?php esc_html_e( 'LinkedIn:', 'codice' ); ?>
-							<a href="https://linkedin.com/in/brunoanastassakis" target="_blank" rel="noopener noreferrer" class="link-plain">
-								linkedin.com/in/brunoanastassakis
-							</a>
-						</li>
+						<?php if ( is_email( $contact_email ) ) : ?>
+							<li class="mb-xs font-mono meta">
+								<?php esc_html_e( 'E-mail:', 'codice' ); ?>
+								<a href="<?php echo esc_url( 'mailto:' . $contact_email ); ?>" class="link-plain">
+									<?php echo esc_html( $contact_email ); ?>
+								</a>
+							</li>
+						<?php endif; ?>
+						<?php if ( $linkedin_url ) : ?>
+							<li class="font-mono meta">
+								<?php esc_html_e( 'LinkedIn:', 'codice' ); ?>
+								<a href="<?php echo esc_url( $linkedin_url ); ?>" target="_blank" rel="noopener noreferrer" class="link-plain">
+									<?php echo esc_html( preg_replace( '#^https?://(www\.)?#', '', untrailingslashit( $linkedin_url ) ) ); ?>
+								</a>
+							</li>
+						<?php endif; ?>
 					</ul>
 				</section>
 			</div>

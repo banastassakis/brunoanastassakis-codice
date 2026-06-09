@@ -12,7 +12,7 @@
  *  4. Artigos recentes (sem duplicar o destaque)
  *  5. Eixos editoriais (5 categorias fixas de inc/categories.php)
  *  6. Bloco curto sobre o autor (author-block.php)
- *  7. Chamada discreta para contato (sem newsletter funcional — Etapa 5)
+ *  7. Captação Substack nativa e chamada discreta para contato
  *
  * Regras Códice:
  * - Um único <h1> por página (bloco 1).
@@ -20,7 +20,7 @@
  * - Sem lógica pesada aqui: extraída para helpers e template-parts.
  * - Placeholder-first: nunca quebra por falta de posts.
  * - Categorias inexistentes no banco não geram links falsos.
- * - Sem Substack funcional nesta etapa.
+ * - Captação Substack nativa, sem iframe ou script externo.
  *
  * @package codice
  */
@@ -73,7 +73,7 @@ if ( ! $featured_id ) {
 
 // URL da página de contato (slug 'contato') para fallback seguro.
 $contato_page = get_page_by_path( 'contato' );
-$contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : '';
+$contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : home_url( '/contato/' );
 
 ?>
 
@@ -289,10 +289,7 @@ $contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : '';
 				wp_reset_postdata();
 
 				// Link para o acervo completo.
-				$artigos_page = get_option( 'page_for_posts' );
-				$artigos_url  = $artigos_page
-					? get_permalink( $artigos_page )
-					: home_url( '/' );
+				$artigos_url = function_exists( 'codice_get_posts_index_url' ) ? codice_get_posts_index_url() : home_url( '/artigos/' );
 				?>
 
 				<p class="home-recent__archive-link">
@@ -393,15 +390,25 @@ $contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : '';
 
 
 	<!-- ════════════════════════════════════════════════════════════════════
-	     Bloco 7 — Chamada discreta para contato
-	     Sem Substack funcional nesta etapa (Etapa 5).
-	     Chamada editorial simples com link para a página Contato.
+	     Bloco 7 — Newsletter e chamada discreta para contato
+	     Captação Substack nativa, sem iframe/embed.
 	     ════════════════════════════════════════════════════════════════════ -->
 
 	<section class="home-section home-contact-cta" aria-labelledby="cta-heading">
 		<div class="container">
 
 			<hr class="section-divider" aria-hidden="true">
+
+			<?php
+			get_template_part(
+				'template-parts/newsletter-substack',
+				null,
+				array(
+					'context' => 'home',
+					'form_id' => 'codice-newsletter-home',
+				)
+			);
+			?>
 
 			<div class="home-cta">
 

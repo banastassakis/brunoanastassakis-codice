@@ -29,7 +29,8 @@ $title         = get_the_title();
 $date_iso      = get_the_date( 'Y-m-d' );
 $date_display  = get_the_date();
 $has_thumbnail = has_post_thumbnail();
-$has_excerpt   = has_excerpt() || get_the_excerpt();
+$excerpt        = get_the_excerpt();
+$has_excerpt   = has_excerpt() || $excerpt;
 
 // Categoria principal: a primeira da lista de categorias do post.
 $categories  = get_the_category();
@@ -83,7 +84,7 @@ if ( ! empty( $categories ) ) {
 
 		<?php if ( $has_excerpt ) : ?>
 			<div class="card-article__excerpt">
-				<?php the_excerpt(); ?>
+				<?php echo wp_kses_post( wpautop( $excerpt ) ); ?>
 			</div>
 		<?php endif; ?>
 

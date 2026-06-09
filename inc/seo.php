@@ -81,7 +81,7 @@ function codice_add_seo_meta_tags() {
 
 	if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
 		$url         = home_url( '/manutencao/' );
-		$description = esc_html__( 'Este espaço está sendo preparado. Contatos disponíveis por e-mail, LinkedIn e WhatsApp.', 'codice' );
+		$description = esc_html__( 'Este espaço está sendo preparado. Enquanto isso, os canais diretos seguem disponíveis.', 'codice' );
 	} elseif ( is_singular() ) {
 		global $post;
 		$url = get_permalink();
@@ -109,12 +109,15 @@ function codice_add_seo_meta_tags() {
 		if ( has_post_thumbnail() ) {
 			$image = get_the_post_thumbnail_url( get_the_ID(), 'large' );
 		}
-	} elseif ( is_front_page() || is_home() ) {
+	} elseif ( is_front_page() ) {
 		$url         = home_url( '/' );
 		$description = wp_strip_all_tags( get_bloginfo( 'description' ) );
 		if ( empty( $description ) ) {
 			$description = esc_html__( 'Ensaios, análises e reflexões sobre conteúdo, comunicação, eventos, IA e ecossistema editorial.', 'codice' );
 		}
+	} elseif ( is_home() ) {
+		$url         = function_exists( 'codice_get_posts_index_url' ) ? codice_get_posts_index_url() : home_url( '/artigos/' );
+		$description = esc_html__( 'Acervo de artigos sobre conteúdo, comunicação, eventos, IA e ecossistema editorial.', 'codice' );
 	} elseif ( is_category() ) {
 		$url         = get_category_link( get_queried_object_id() );
 		$description = wp_strip_all_tags( category_description() );
@@ -123,7 +126,7 @@ function codice_add_seo_meta_tags() {
 			$description = sprintf( esc_html__( 'Artigos na categoria %s.', 'codice' ), single_cat_title( '', false ) );
 		}
 	} elseif ( is_search() ) {
-		$url         = home_url( '/?s=' . get_search_query() );
+		$url         = add_query_arg( 's', rawurlencode( get_search_query() ), home_url( '/' ) );
 		$description = esc_html__( 'Resultados de busca na publicação.', 'codice' );
 	} elseif ( is_404() ) {
 		$url         = home_url( '/' );
