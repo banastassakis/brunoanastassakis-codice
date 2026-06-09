@@ -37,7 +37,7 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 				<?php esc_html_e( 'O site está sendo preparado.', 'codice' ); ?>
 			</h1>
 			<p class="maintenance-screen__text">
-				<?php esc_html_e( 'Em breve, esta publicação editorial estará disponível.', 'codice' ); ?>
+				<?php esc_html_e( 'Estou preparando este espaço. Fique à vontade para entrar em contato pelos canais abaixo.', 'codice' ); ?>
 			</p>
 
 			<nav class="maintenance-contact" aria-label="<?php esc_attr_e( 'Canais de contato', 'codice' ); ?>">

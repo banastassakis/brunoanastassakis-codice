@@ -63,7 +63,7 @@ function codice_add_seo_meta_tags() {
 
 	if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
 		$url         = home_url( '/manutencao/' );
-		$description = esc_html__( 'O site está sendo preparado. Em breve, esta publicação editorial estará disponível.', 'codice' );
+		$description = esc_html__( 'O site está sendo preparado. Estou preparando este espaço. Fique à vontade para entrar em contato pelos canais abaixo.', 'codice' );
 	} elseif ( is_singular() ) {
 		global $post;
 		$url = get_permalink();
