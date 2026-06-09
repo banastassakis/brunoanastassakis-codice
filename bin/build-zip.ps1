@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Stop'
 $ThemeSlug = 'brunoanastassakis-codice'
 $ThemeRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 
+Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 if ((Split-Path $ThemeRoot -Leaf) -ne $ThemeSlug) {
@@ -119,16 +120,57 @@ try {
 		Remove-Item -LiteralPath $ZipPath -Force
 	}
 
-	Compress-Archive -LiteralPath $StageTheme -DestinationPath $ZipPath -CompressionLevel Optimal
+	# Criar arquivo ZIP usando System.IO.Compression.ZipArchive para forçar barras normais (/)
+	$ZipStream = [System.IO.File]::Create($ZipPath)
+	try {
+		$Archive = New-Object System.IO.Compression.ZipArchive($ZipStream, [System.IO.Compression.ZipArchiveMode]::Create)
+		try {
+			Get-ChildItem -LiteralPath $StageTheme -Recurse -File | ForEach-Object {
+				$FilePath = $_.FullName
+				# O caminho relativo deve começar com $ThemeSlug/
+				# $StageTheme é $TempRoot/$ThemeSlug, então calculamos relativo a $TempRoot
+				$RelativePath = $FilePath.Substring($TempRoot.Length + 1)
+				$ZipEntryName = $RelativePath.Replace('\', '/')
+				
+				# Criar entrada no zip e copiar dados
+				$Entry = $Archive.CreateEntry($ZipEntryName, [System.IO.Compression.CompressionLevel]::Optimal)
+				$SourceStream = [System.IO.File]::OpenRead($FilePath)
+				try {
+					$EntryStream = $Entry.Open()
+					try {
+						$SourceStream.CopyTo($EntryStream)
+					} finally {
+						$EntryStream.Dispose()
+					}
+				} finally {
+					$SourceStream.Dispose()
+				}
+			}
+		} finally {
+			$Archive.Dispose()
+		}
+	} finally {
+		$ZipStream.Dispose()
+	}
 
 	$Zip = [System.IO.Compression.ZipFile]::OpenRead($ZipPath)
 	try {
-		$Entries = @(
+		$RawEntries = @(
 			$Zip.Entries |
-				ForEach-Object { $_.FullName.Replace('\', '/') }
+				ForEach-Object { $_.FullName }
+		)
+		$Entries = @(
+			$RawEntries |
+				ForEach-Object { $_.Replace('\', '/') }
 		)
 	} finally {
 		$Zip.Dispose()
+	}
+
+	# Validar se alguma entrada contém barras invertidas (que causam erro no Linux/WordPress)
+	$InvalidBackslashEntries = @($RawEntries | Where-Object { $_.Contains('\') })
+	if ($InvalidBackslashEntries.Count -gt 0) {
+		throw "ZIP contains entries with backslashes (\) which are invalid in Linux/WordPress installations: $($InvalidBackslashEntries -join ', ')"
 	}
 
 	foreach ($RequiredEntry in $RequiredZipEntries) {
