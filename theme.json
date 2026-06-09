@@ -1,0 +1,109 @@
+{
+	"version": 2,
+	"settings": {
+		"appearanceTools": false,
+		"color": {
+			"custom": false,
+			"customGradient": false,
+			"palette": [
+				{
+					"name": "Bone",
+					"slug": "bone",
+					"color": "#FBFAF6"
+				},
+				{
+					"name": "Vellum",
+					"slug": "vellum",
+					"color": "#F4F2EB"
+				},
+				{
+					"name": "Dustcover",
+					"slug": "dustcover",
+					"color": "#ECEADF"
+				},
+				{
+					"name": "Graphite",
+					"slug": "graphite",
+					"color": "#191A1F"
+				},
+				{
+					"name": "Slate",
+					"slug": "slate",
+					"color": "#3D3F46"
+				},
+				{
+					"name": "Pencil",
+					"slug": "pencil",
+					"color": "#7A7B82"
+				},
+				{
+					"name": "Petroleum",
+					"slug": "petroleum",
+					"color": "#0F4346"
+				},
+				{
+					"name": "Abyss",
+					"slug": "abyss",
+					"color": "#093033"
+				},
+				{
+					"name": "Margin",
+					"slug": "margin",
+					"color": "#DDD8CC"
+				},
+				{
+					"name": "Brass",
+					"slug": "brass",
+					"color": "#A88A4E"
+				}
+			]
+		},
+		"typography": {
+			"customFontSize": false,
+			"dropCap": false,
+			"fontFamilies": [
+				{
+					"fontFamily": "\"Newsreader\", \"Source Serif Pro\", Georgia, \"Times New Roman\", serif",
+					"name": "Newsreader",
+					"slug": "serif"
+				},
+				{
+					"fontFamily": "\"IBM Plex Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Helvetica, Arial, sans-serif",
+					"name": "IBM Plex Sans",
+					"slug": "sans"
+				},
+				{
+					"fontFamily": "\"IBM Plex Mono\", ui-monospace, \"SF Mono\", Menlo, Consolas, monospace",
+					"name": "IBM Plex Mono",
+					"slug": "mono"
+				}
+			],
+			"fontSizes": [
+				{
+					"name": "Pequeno",
+					"slug": "small",
+					"size": "0.875rem"
+				},
+				{
+					"name": "Base",
+					"slug": "normal",
+					"size": "1.125rem"
+				},
+				{
+					"name": "Grande",
+					"slug": "large",
+					"size": "1.5rem"
+				},
+				{
+					"name": "Muito Grande",
+					"slug": "huge",
+					"size": "2.25rem"
+				}
+			]
+		},
+		"layout": {
+			"contentSize": "680px",
+			"wideSize": "980px"
+		}
+	}
+}

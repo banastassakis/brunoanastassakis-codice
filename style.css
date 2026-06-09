@@ -1,0 +1,72 @@
+/*
+Theme Name:  Bruno Anastassakis — Códice
+Theme URI:   https://brunoanastassakis.com
+Author:      Bruno Anastassakis
+Author URI:  https://brunoanastassakis.com
+Description: Tema WordPress clássico para a publicação editorial autoral brunoanastassakis.com. Materializa o Design System Códice v6.
+Version:     1.0.0
+Requires at least: 6.4
+Tested up to: 6.7
+Requires PHP: 8.1
+License:     GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: codice
+Tags:        editorial, custom-menu, post-thumbnails, html5
+*/
+
+/*
+ * Reset mínimo — valores concretos aqui são estruturais, não visuais.
+ * Cores, fontes e espaçamentos visuais vivem em assets/css/tokens.css
+ * e assets/css/main.css via custom properties.
+ */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+figure,
+ul,
+ol,
+li,
+dl,
+dt,
+dd {
+	margin:  0;
+	padding: 0;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+img,
+video,
+svg {
+	display:   block;
+	max-width: 100%;
+	height:    auto;
+}
+
+a {
+	color: inherit;
+}
+
+button {
+	cursor:     pointer;
+	background: none;
+	border:     none;
+	padding:    0;
+}

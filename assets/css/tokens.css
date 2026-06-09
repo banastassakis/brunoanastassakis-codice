@@ -1,0 +1,65 @@
+/*
+ * assets/css/tokens.css — Custom Properties do Códice v6
+ *
+ * Fonte de verdade visual do tema. Todo valor de cor, fonte e espaçamento
+ * do tema é referenciado a partir daqui via var(--nome).
+ * Nenhum valor cru em main.css, header.php ou qualquer outro arquivo.
+ *
+ * Referência: docs/02-codice-tokens.md e docs/codice-designsystem-v6.html
+ *
+ * @package codice
+ */
+
+:root {
+
+	/* ── Paleta de interface ─────────────────────────────────────────────── */
+
+	--bone:       #FBFAF6; /* fundo principal (papel)            */
+	--vellum:     #F4F2EB; /* fundo secundário                   */
+	--dustcover:  #ECEADF; /* fundo terciário                    */
+
+	--graphite:   #191A1F; /* texto principal                    */
+	--slate:      #3D3F46; /* texto secundário                   */
+	--pencil:     #7A7B82; /* texto terciário / metadados        */
+
+	--petroleum:  #0F4346; /* acento: link, estado, ênfase       */
+	--abyss:      #093033; /* acento hover                       */
+
+	--margin:     #DDD8CC; /* borda suave / separador            */
+	--brass:      #A88A4E; /* detalhe decorativo — só filetes    */
+
+	/* ── Filetes ─────────────────────────────────────────────────────────── */
+
+	--rule:        #191A1F18; /* filete fino   */
+	--rule-strong: #191A1F30; /* filete forte  */
+
+	/* ── Tipografia ──────────────────────────────────────────────────────── */
+
+	/*
+	 * Serif: títulos, ledes, nomes, citações, aberturas de seção.
+	 * Fontes self-hosted (.woff2) serão declaradas via @font-face na Etapa 2.
+	 * Até lá, os fallbacks do sistema garantem a renderização.
+	 */
+	--serif: "Newsreader", "Source Serif Pro", Georgia, "Times New Roman", serif;
+
+	/*
+	 * Sans: corpo, listas, descrições, navegação, componentes.
+	 */
+	--sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
+	        "Segoe UI", Helvetica, Arial, sans-serif;
+
+	/*
+	 * Mono: datas, captions, labels de seção, metadados (uppercase), código.
+	 */
+	--mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo,
+	        Consolas, "Courier New", monospace;
+
+	/* ── Layout ──────────────────────────────────────────────────────────── */
+
+	--radius:        6px;
+	--space-section: clamp(76px, 10vw, 124px);
+
+	/* ── Acessibilidade ──────────────────────────────────────────────────── */
+
+	--focus-ring: var(--petroleum);
+}

@@ -1,0 +1,2374 @@
+/*
+ * assets/css/main.css — Sistema visual do tema Códice v6
+ *
+ * Etapa 2: tipografia editorial, ritmo vertical, grid, filetes,
+ * links, botões, foco visível, estados vazios e responsividade.
+ *
+ * Usa exclusivamente custom properties de assets/css/tokens.css.
+ * Nenhum valor cru de cor, fonte ou espaçamento aqui,
+ * exceto dentro de @font-face (paths e metadados técnicos).
+ *
+ * @package codice
+ */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   1. FONTES SELF-HOSTED (@font-face)
+   Paths relativos a assets/css/main.css → ../fonts/
+   font-display: swap para renderização imediata com fallback.
+   Apenas os pesos efetivamente usados no tema são declarados.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Newsreader (serifa) — títulos, ledes, citações, aberturas ─────────── */
+
+@font-face {
+	font-family: "Newsreader";
+	src: url("../fonts/newsreader-400.woff2") format("woff2");
+	font-weight:  400;
+	font-style:   normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Newsreader";
+	src: url("../fonts/newsreader-400italic.woff2") format("woff2");
+	font-weight:  400;
+	font-style:   italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Newsreader";
+	src: url("../fonts/newsreader-600.woff2") format("woff2");
+	font-weight:  600;
+	font-style:   normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Newsreader";
+	src: url("../fonts/newsreader-600italic.woff2") format("woff2");
+	font-weight:  600;
+	font-style:   italic;
+	font-display: swap;
+}
+
+/* ── IBM Plex Sans (sans) — corpo, listas, navegação, componentes ───────── */
+
+@font-face {
+	font-family: "IBM Plex Sans";
+	src: url("../fonts/ibmplexsans-400.woff2") format("woff2");
+	font-weight:  400;
+	font-style:   normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "IBM Plex Sans";
+	src: url("../fonts/ibmplexsans-400italic.woff2") format("woff2");
+	font-weight:  400;
+	font-style:   italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "IBM Plex Sans";
+	src: url("../fonts/ibmplexsans-500.woff2") format("woff2");
+	font-weight:  500;
+	font-style:   normal;
+	font-display: swap;
+}
+
+/* ── IBM Plex Mono (mono) — datas, captions, metadados, labels ─────────── */
+
+@font-face {
+	font-family: "IBM Plex Mono";
+	src: url("../fonts/ibmplexmono-400.woff2") format("woff2");
+	font-weight:  400;
+	font-style:   normal;
+	font-display: swap;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. BASE GLOBAL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size:                100%; /* 16px base */
+	-webkit-text-size-adjust: 100%;
+	scroll-behavior:          smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+body {
+	background-color: var(--bone);
+	color:            var(--graphite);
+	font-family:      var(--sans);
+	font-size:        1rem;
+	line-height:      1.65;
+
+	/* Previne overflow horizontal */
+	overflow-x:       hidden;
+	min-height:       100vh;
+
+	/* Empilhamento completo: header / main / footer */
+	display:          flex;
+	flex-direction:   column;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. ACESSIBILIDADE — SKIP LINK E FOCO VISÍVEL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Skip link ──────────────────────────────────────────────────────────── */
+
+.skip-link {
+	position:        absolute;
+	top:             -100%;
+	left:            1rem;
+	z-index:         9999;
+	padding:         0.5em 1em;
+	background:      var(--petroleum);
+	color:           var(--bone);
+	font-family:     var(--mono);
+	font-size:       0.75rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	text-decoration: none;
+	border-radius:   var(--radius);
+	transition:      top 0.1s;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+	top: 1rem;
+}
+
+/* ── Foco visível (acessibilidade) ─────────────────────────────────────── */
+
+:focus-visible {
+	outline:        2px solid var(--focus-ring);
+	outline-offset: 3px;
+	border-radius:  var(--radius);
+}
+
+/* Remove outline padrão apenas quando :focus-visible está disponível */
+:focus:not(:focus-visible) {
+	outline: none;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. TIPOGRAFIA — BASE EDITORIAL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Parágrafos e texto corrido ─────────────────────────────────────────── */
+
+p {
+	margin-block-end: 1.5em;
+	max-width:        72ch; /* largura confortável de leitura */
+}
+
+p:last-child {
+	margin-block-end: 0;
+}
+
+/* ── Headings — escala fluida com Newsreader ────────────────────────────── */
+/*
+ * Hierarquia tipográfica: família, peso e tamanho organizam o conteúdo.
+ * Cor não é usada para diferenciar nível de heading.
+ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family:    var(--serif);
+	font-weight:    600;
+	line-height:    1.2;
+	letter-spacing: -0.01em;
+	color:          var(--graphite);
+	margin-block-start: 0;
+	margin-block-end:   0.5em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.625rem); }
+h4 { font-size: clamp(1.0625rem, 2vw, 1.25rem); font-weight: 600; }
+h5 { font-size: 1rem;    font-weight: 600; }
+h6 { font-size: 0.9375rem; font-weight: 600; }
+
+/* ── Lede / resumo editorial (Newsreader, peso normal, leve) ────────────── */
+/*
+ * Usado como primeiro parágrafo de abertura editorial, subtítulo de
+ * artigo ou frase de apresentação. Aplicar com .lede ou .entry-lede.
+ */
+
+.lede,
+.entry-lede {
+	font-family:    var(--serif);
+	font-size:      clamp(1.125rem, 2.5vw, 1.375rem);
+	font-weight:    400;
+	line-height:    1.5;
+	color:          var(--slate);
+	margin-block-end: 1.75em;
+}
+
+/* ── Listas ─────────────────────────────────────────────────────────────── */
+
+ul,
+ol {
+	padding-inline-start: 1.5em;
+	margin-block-end:     1.5em;
+}
+
+li {
+	margin-block-end: 0.35em;
+}
+
+li:last-child {
+	margin-block-end: 0;
+}
+
+/* Lista sem estilo (utilitária) */
+.list-bare {
+	list-style:           none;
+	padding-inline-start: 0;
+	margin-block-end:     0;
+}
+
+/* ── Citação (blockquote) ───────────────────────────────────────────────── */
+
+blockquote {
+	margin-inline:        0;
+	padding-inline-start: 1.5rem;
+	border-inline-start:  2px solid var(--brass); /* Brass apenas como filete decorativo */
+	font-family:          var(--serif);
+	font-size:            clamp(1.0625rem, 2vw, 1.1875rem);
+	font-style:           italic;
+	color:                var(--slate);
+	margin-block-end:     1.75em;
+}
+
+blockquote p {
+	max-width: none;
+}
+
+blockquote cite,
+blockquote footer {
+	display:        block;
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	font-style:     normal;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	margin-block-start: 0.75em;
+}
+
+/* ── Figcaption ─────────────────────────────────────────────────────────── */
+
+figcaption {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color:          var(--pencil);
+	margin-block-start: 0.5em;
+	line-height:    1.5;
+}
+
+/* ── Metadados (mono, uppercase, Pencil) ────────────────────────────────── */
+/*
+ * Padrão global para datas, categorias, labels de seção e metadados.
+ * Usar com .meta ou subclasses como .post-meta.
+ */
+
+.meta {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	line-height:    1.5;
+}
+
+/* ── Código inline e pré-formatado ─────────────────────────────────────── */
+
+code,
+kbd,
+samp {
+	font-family: var(--mono);
+	font-size:   0.875em;
+	background:  var(--dustcover);
+	padding:     0.1em 0.3em;
+	border-radius: var(--radius);
+}
+
+pre {
+	font-family:    var(--mono);
+	font-size:      0.875rem;
+	background:     var(--dustcover);
+	padding:        1.25rem;
+	border-radius:  var(--radius);
+	overflow-x:     auto;
+	margin-block-end: 1.75em;
+}
+
+pre code {
+	background:  transparent;
+	padding:     0;
+	font-size:   inherit;
+}
+
+/* ── Texto forte e ênfase ───────────────────────────────────────────────── */
+
+strong, b { font-weight: 600; }
+em, i      { font-style: italic; }
+
+/* ── Separador horizontal ───────────────────────────────────────────────── */
+
+hr {
+	border:           none;
+	border-block-start: 1px solid var(--rule);
+	margin-block:     2.5rem;
+}
+
+hr.rule-strong {
+	border-block-start-color: var(--rule-strong);
+}
+
+hr.rule-brass {
+	border-block-start-color: var(--brass);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. LINKS DE TEXTO
+   ══════════════════════════════════════════════════════════════════════════ */
+
+a {
+	color:                 var(--petroleum);
+	text-decoration:       underline;
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 1px;
+	transition:            color 0.15s ease;
+}
+
+a:hover,
+a:focus-visible {
+	color: var(--abyss);
+}
+
+/* Links sem decoração (contextos específicos: nav, cards, botões) */
+a.link-plain {
+	text-decoration: none;
+}
+
+a.link-plain:hover,
+a.link-plain:focus-visible {
+	text-decoration: underline;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. BOTÕES E AÇÕES
+   Petroleum como acento funcional. Brass nunca em botão ou fundo de destaque.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Botão primário — Petroleum sólido */
+.btn,
+button.btn,
+input[type="submit"].btn {
+	display:          inline-flex;
+	align-items:      center;
+	gap:              0.5em;
+	padding:          0.6em 1.25em;
+	background:       var(--petroleum);
+	color:            var(--bone);
+	font-family:      var(--mono);
+	font-size:        0.6875rem;
+	font-weight:      400;
+	text-transform:   uppercase;
+	letter-spacing:   0.1em;
+	text-decoration:  none;
+	border:           none;
+	border-radius:    var(--radius);
+	cursor:           pointer;
+	transition:       background 0.15s ease, color 0.15s ease;
+	line-height:      1.4;
+}
+
+.btn:hover,
+.btn:focus-visible,
+button.btn:hover,
+button.btn:focus-visible {
+	background:      var(--abyss);
+	color:           var(--bone);
+	text-decoration: none;
+}
+
+/* Botão ghost — borda Petroleum, fundo transparente */
+.btn-ghost {
+	background:    transparent;
+	color:         var(--petroleum);
+	border:        1px solid var(--petroleum);
+}
+
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+	background: var(--petroleum);
+	color:      var(--bone);
+}
+
+/* Botão de texto simples (inline, sem fundo) */
+.btn-text {
+	background:   transparent;
+	color:        var(--petroleum);
+	padding:      0;
+	border:       none;
+	border-radius: 0;
+	font-family:  var(--mono);
+	font-size:    0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	text-decoration: none;
+	cursor:       pointer;
+}
+
+.btn-text:hover,
+.btn-text:focus-visible {
+	color: var(--abyss);
+}
+
+/* Utilitário: remove estilo padrão de botão nativo */
+button {
+	font: inherit;
+	cursor: pointer;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. FORMULÁRIOS — BASE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+input,
+textarea,
+select {
+	font-family:  var(--sans);
+	font-size:    1rem;
+	color:        var(--graphite);
+	background:   var(--bone);
+	border:       1px solid var(--margin);
+	border-radius: var(--radius);
+	padding:      0.5em 0.75em;
+	width:        100%;
+	transition:   border-color 0.15s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline:       none;
+	border-color:  var(--petroleum);
+	box-shadow:    0 0 0 2px color-mix(in srgb, var(--petroleum) 20%, transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--pencil);
+}
+
+label {
+	display:         block;
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	color:           var(--slate);
+	margin-block-end: 0.4em;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. LAYOUT — CONTAINERS E GRID EDITORIAL
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Container principal (largura editorial máxima) ─────────────────────── */
+
+.container {
+	max-width:      1280px;
+	margin-inline:  auto;
+	padding-inline: clamp(1rem, 4vw, 3rem);
+	width:          100%;
+}
+
+/* Container de leitura (mais estreito, confortável para texto corrido) */
+.container-reading {
+	max-width:      720px;
+	margin-inline:  auto;
+	padding-inline: clamp(1rem, 4vw, 3rem);
+	width:          100%;
+}
+
+/* Container largo (para elementos que pedem mais respiro) */
+.container-wide {
+	max-width:      1440px;
+	margin-inline:  auto;
+	padding-inline: clamp(1rem, 4vw, 3rem);
+	width:          100%;
+}
+
+/* ── Grid editorial reutilizável ────────────────────────────────────────── */
+/*
+ * Colunas com minmax(0, 1fr) para prevenir overflow.
+ * Filhos devem ter min-width: 0 se contiverem conteúdo dinâmico longo.
+ */
+
+.grid {
+	display: grid;
+	gap:     clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Grid auto-responsivo: adapta o número de colunas ao espaço disponível */
+.grid-auto {
+	grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+}
+
+/* Proteção contra overflow em filhos de grid/flex */
+.grid > *,
+.grid-2 > *,
+.grid-3 > *,
+.grid-4 > *,
+.grid-auto > * {
+	min-width: 0;
+}
+
+/* ── Flex utilitários ───────────────────────────────────────────────────── */
+
+.flex        { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-wrap   { flex-wrap: wrap; }
+.gap-sm      { gap: 0.75rem; }
+.gap-md      { gap: 1.5rem; }
+.gap-lg      { gap: clamp(1.5rem, 3vw, 2.5rem); }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. RITMO VERTICAL — SEÇÕES E BLOCOS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Conteúdo principal ─────────────────────────────────────────────────── */
+
+.site-main {
+	flex:          1; /* ocupa o espaço restante entre header e footer */
+	padding-block: var(--space-section);
+}
+
+/* ── Seção genérica ─────────────────────────────────────────────────────── */
+
+.section {
+	padding-block: var(--space-section);
+}
+
+.section + .section {
+	padding-block-start: 0;
+}
+
+/* ── Título de seção ────────────────────────────────────────────────────── */
+
+.section-label {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color:          var(--pencil);
+	margin-block-end: 0.75rem;
+	display:        block;
+}
+
+.section-title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.5rem, 3.5vw, 2.25rem);
+	font-weight:    600;
+	color:          var(--graphite);
+	margin-block-end: 0.5em;
+}
+
+.section-intro {
+	font-family:    var(--serif);
+	font-size:      clamp(1rem, 2vw, 1.125rem);
+	font-weight:    400;
+	color:          var(--slate);
+	max-width:      60ch;
+	margin-block-end: 2rem;
+}
+
+/* ── Divisor de seção (filete) ──────────────────────────────────────────── */
+
+.section-divider {
+	border:               none;
+	border-block-start:   1px solid var(--rule);
+	margin-block:         0;
+}
+
+.section-divider--strong {
+	border-block-start-color: var(--rule-strong);
+}
+
+.section-divider--brass {
+	border-block-start-color: var(--brass);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10. FILETES FINOS
+   Brass apenas como detalhe decorativo de baixa frequência.
+   Nunca como botão, fundo ou elemento funcional.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Utilitários de borda via classe */
+.border-top         { border-block-start: 1px solid var(--rule); }
+.border-bottom      { border-block-end:   1px solid var(--rule); }
+.border-top-strong  { border-block-start: 1px solid var(--rule-strong); }
+.border-bottom-strong { border-block-end: 1px solid var(--rule-strong); }
+.border-top-brass   { border-block-start: 1px solid var(--brass); }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11. HEADER DO SITE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.site-header {
+	border-bottom: 1px solid var(--rule);
+	padding-block: 1.25rem;
+}
+
+.site-header__inner {
+	max-width:      1280px;
+	margin-inline:  auto;
+	padding-inline: clamp(1rem, 4vw, 3rem);
+	display:        flex;
+	align-items:    center;
+	justify-content: space-between;
+	gap:            1.5rem;
+	flex-wrap:      wrap;
+}
+
+/* Nome / logo textual */
+.site-header__name {
+	font-family:    var(--serif);
+	font-size:      1.125rem;
+	font-weight:    600;
+	letter-spacing: -0.01em;
+	margin:         0;
+}
+
+.site-header__name a {
+	color:           var(--graphite);
+	text-decoration: none;
+}
+
+.site-header__name a:hover,
+.site-header__name a:focus-visible {
+	color:           var(--petroleum);
+	text-decoration: none;
+}
+
+/* ── Navegação principal ────────────────────────────────────────────────── */
+
+.site-nav__list {
+	display:    flex;
+	flex-wrap:  wrap;
+	gap:        0.25rem 1.5rem;
+	list-style: none;
+	margin:     0;
+	padding:    0;
+}
+
+.site-nav__list a {
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.1em;
+	color:           var(--slate);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.site-nav__list a:hover,
+.site-nav__list a:focus-visible {
+	color: var(--petroleum);
+}
+
+.site-nav__list li.current-menu-item > a,
+.site-nav__list li.current_page_item > a {
+	color:        var(--petroleum);
+	border-bottom: 1px solid var(--petroleum);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   12. FOOTER DO SITE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.site-footer {
+	border-top:    1px solid var(--rule);
+	padding-block: 2rem;
+	margin-top:    auto;
+}
+
+.site-footer__inner {
+	max-width:      1280px;
+	margin-inline:  auto;
+	padding-inline: clamp(1rem, 4vw, 3rem);
+	display:        flex;
+	align-items:    center;
+	justify-content: space-between;
+	flex-wrap:      wrap;
+	gap:            1rem;
+}
+
+.site-footer__copy {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+}
+
+.site-footer__links {
+	display:    flex;
+	gap:        1.25rem;
+	list-style: none;
+	margin:     0;
+	padding:    0;
+}
+
+.site-footer__links a {
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	color:           var(--pencil);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.site-footer__links a:hover,
+.site-footer__links a:focus-visible {
+	color: var(--petroleum);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13. LOOP DE POSTS (index.php e listagens futuras)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.posts-list {
+	display:        flex;
+	flex-direction: column;
+	gap:            0;
+}
+
+.post-item {
+	padding-block:  2.5rem;
+	border-bottom:  1px solid var(--rule);
+}
+
+.post-item:first-child {
+	padding-block-start: 0;
+}
+
+.post-item:last-child {
+	border-bottom:      none;
+	padding-block-end:  0;
+}
+
+/* Metadados do post (data, categoria) */
+.post-item__meta {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	margin-block-end: 0.5rem;
+	display:        flex;
+	flex-wrap:      wrap;
+	gap:            0 1rem;
+	align-items:    center;
+}
+
+.post-item__meta-sep {
+	color: var(--margin);
+}
+
+/* Título do post */
+.post-item__title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.25rem, 2.5vw, 1.75rem);
+	font-weight:    600;
+	line-height:    1.25;
+	letter-spacing: -0.01em;
+	margin-block-end: 0.65rem;
+}
+
+.post-item__title a {
+	color:           var(--graphite);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.post-item__title a:hover,
+.post-item__title a:focus-visible {
+	color: var(--petroleum);
+}
+
+/* Excerpt / resumo */
+.post-item__excerpt {
+	font-family:    var(--sans);
+	font-size:      0.9375rem;
+	color:          var(--slate);
+	line-height:    1.65;
+	max-width:      68ch;
+	margin-block-end: 0.75rem;
+}
+
+/* Link "continuar lendo" */
+.post-item__read-more {
+	display:        inline-flex;
+	align-items:    center;
+	gap:            0.35em;
+	margin-top:     0.75rem;
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--petroleum);
+	text-decoration: none;
+	transition:     color 0.15s ease;
+}
+
+.post-item__read-more:hover,
+.post-item__read-more:focus-visible {
+	color: var(--abyss);
+}
+
+/* Categoria como badge/label */
+.post-item__cat {
+	font-family:    var(--mono);
+	font-size:      0.6125rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color:          var(--petroleum);
+	text-decoration: none;
+	transition:     color 0.15s ease;
+}
+
+.post-item__cat:hover,
+.post-item__cat:focus-visible {
+	color: var(--abyss);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   14. CONTEÚDO EDITORIAL (entry-content — artigo individual)
+   Estilos para o corpo do artigo gerado pelo editor de blocos.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.entry-content {
+	font-family: var(--sans);
+	font-size:   1rem;
+	line-height: 1.75;
+	color:       var(--graphite);
+}
+
+.entry-content > * + * {
+	margin-block-start: 1.5em;
+}
+
+.entry-content p,
+.entry-content ul,
+.entry-content ol {
+	max-width: 72ch;
+}
+
+.entry-content h2,
+.entry-content h3,
+.entry-content h4 {
+	margin-block-start: 2.5em;
+	margin-block-end:   0.5em;
+}
+
+.entry-content h2 + *,
+.entry-content h3 + *,
+.entry-content h4 + * {
+	margin-block-start: 0;
+}
+
+.entry-content img,
+.entry-content figure {
+	margin-block: 2rem;
+}
+
+.entry-content blockquote {
+	margin-inline-start: 0;
+}
+
+.entry-content a {
+	color:                 var(--petroleum);
+	text-decoration:       underline;
+	text-underline-offset: 0.2em;
+}
+
+.entry-content a:hover,
+.entry-content a:focus-visible {
+	color: var(--abyss);
+}
+
+/* Cabeçalho do artigo individual */
+.entry-header {
+	margin-block-end: clamp(2rem, 4vw, 3rem);
+}
+
+.entry-header__meta {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	margin-block-end: 0.75rem;
+	display:        flex;
+	flex-wrap:      wrap;
+	gap:            0 1rem;
+	align-items:    center;
+}
+
+.entry-header__title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.875rem, 5vw, 3rem);
+	font-weight:    600;
+	line-height:    1.15;
+	letter-spacing: -0.02em;
+	color:          var(--graphite);
+	margin-block-end: 0.5em;
+}
+
+.entry-header__lede {
+	font-family:    var(--serif);
+	font-size:      clamp(1.125rem, 2.5vw, 1.375rem);
+	font-weight:    400;
+	line-height:    1.5;
+	color:          var(--slate);
+}
+
+/* Imagem de abertura do artigo */
+.entry-thumbnail {
+	margin-block:   clamp(1.5rem, 3vw, 2.5rem);
+	border-radius:  var(--radius);
+	overflow:       hidden;
+}
+
+.entry-thumbnail img {
+	width:       100%;
+	height:      auto;
+	display:     block;
+	object-fit:  cover;
+}
+
+/* Tela de manutenção */
+.maintenance-template .site-main {
+	min-height: 100vh;
+}
+
+.maintenance-main {
+	display:     flex;
+	align-items: center;
+}
+
+.maintenance-screen {
+	border-block-start: 1px solid var(--brass);
+	padding-block-start: calc(var(--space-section) / 3);
+	min-width:           0;
+}
+
+.maintenance-screen__label {
+	font-family:      var(--mono);
+	font-size:        0.6875rem;
+	letter-spacing:   0.12em;
+	text-transform:   uppercase;
+	color:            var(--pencil);
+	margin-block-end: calc(var(--space-section) / 8);
+}
+
+.maintenance-screen__title {
+	font-family:      var(--serif);
+	font-size:        clamp(2rem, 5vw, 3rem);
+	font-weight:      600;
+	line-height:      1.15;
+	color:            var(--graphite);
+	margin-block-end: 0.5em;
+}
+
+.maintenance-screen__text {
+	font-family: var(--serif);
+	font-size:   clamp(1.125rem, 2.5vw, 1.375rem);
+	line-height: 1.5;
+	color:       var(--slate);
+}
+
+.maintenance-contact {
+	margin-block-start: calc(var(--space-section) / 3);
+	padding-block-start: calc(var(--space-section) / 6);
+	border-block-start: 1px solid var(--rule);
+}
+
+.maintenance-contact__list {
+	display:   flex;
+	flex-wrap: wrap;
+	gap:       calc(var(--space-section) / 8);
+	min-width: 0;
+}
+
+.maintenance-contact__item {
+	min-width: 0;
+}
+
+.maintenance-contact__link {
+	display:         inline-flex;
+	align-items:     center;
+	gap:             calc(var(--space-section) / 16);
+	color:           var(--petroleum);
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	text-decoration: none;
+}
+
+.maintenance-contact__link:hover,
+.maintenance-contact__link:focus-visible {
+	color:           var(--abyss);
+	text-decoration: underline;
+}
+
+.maintenance-contact__icon {
+	flex:      0 0 auto;
+	color:     currentColor;
+	max-width: 100%;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   15. ESTADO VAZIO
+   Sóbrio e legível; não depende de posts existentes.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.empty-state {
+	padding-block: var(--space-section);
+	text-align:    center;
+}
+
+.empty-state__label {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color:          var(--pencil);
+	display:        block;
+	margin-block-end: 1rem;
+}
+
+.empty-state__title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.25rem, 2.5vw, 1.625rem);
+	font-weight:    600;
+	color:          var(--graphite);
+	margin-block-end: 0.75rem;
+}
+
+.empty-state__text {
+	font-family:    var(--sans);
+	font-size:      0.9375rem;
+	color:          var(--pencil);
+	max-width:      52ch;
+	margin-inline:  auto;
+	margin-block-end: 1.75rem;
+}
+
+.empty-state__action {
+	margin-block-start: 0.5rem;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   16. PAGINAÇÃO
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.pagination {
+	margin-block-start: 3rem;
+	padding-block-start: 2rem;
+	border-block-start: 1px solid var(--rule);
+}
+
+.pagination .nav-links {
+	display:     flex;
+	flex-wrap:   wrap;
+	gap:         0.5rem;
+	align-items: center;
+}
+
+.pagination .page-numbers {
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	color:           var(--slate);
+	text-decoration: none;
+	padding:         0.4em 0.75em;
+	border:          1px solid transparent;
+	border-radius:   var(--radius);
+	transition:      border-color 0.15s ease, color 0.15s ease;
+}
+
+.pagination .page-numbers:hover,
+.pagination .page-numbers:focus-visible {
+	border-color: var(--petroleum);
+	color:        var(--petroleum);
+}
+
+.pagination .page-numbers.current {
+	color:        var(--petroleum);
+	border-color: var(--petroleum);
+}
+
+.pagination .page-numbers.dots {
+	border-color: transparent;
+	cursor:       default;
+	color:        var(--pencil);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   17. MÍDIA RESPONSIVA
+   ══════════════════════════════════════════════════════════════════════════ */
+
+img,
+video,
+svg,
+iframe,
+embed,
+object {
+	max-width: 100%;
+	height:    auto;
+}
+
+figure {
+	margin-inline: 0;
+}
+
+figure img {
+	display:       block;
+	width:         100%;
+	height:        auto;
+	border-radius: var(--radius);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   18. UTILITÁRIOS GLOBAIS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Espaçamento de bloco */
+.mb-0  { margin-block-end: 0; }
+.mb-xs { margin-block-end: 0.5rem; }
+.mb-sm { margin-block-end: 1rem; }
+.mb-md { margin-block-end: 1.5rem; }
+.mb-lg { margin-block-end: 2.5rem; }
+.mb-xl { margin-block-end: var(--space-section); }
+
+/* Alinhamento de texto */
+.text-center { text-align: center; }
+.text-left   { text-align: left; }
+
+/* Visibilidade */
+.sr-only {
+	position:  absolute;
+	width:     1px;
+	height:    1px;
+	padding:   0;
+	margin:    -1px;
+	overflow:  hidden;
+	clip:      rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border:    0;
+}
+
+/* Fundo alternado */
+.bg-vellum    { background-color: var(--vellum); }
+.bg-dustcover { background-color: var(--dustcover); }
+.bg-bone      { background-color: var(--bone); }
+
+/* Cor de texto */
+.text-graphite { color: var(--graphite); }
+.text-slate    { color: var(--slate); }
+.text-pencil   { color: var(--pencil); }
+.text-petroleum { color: var(--petroleum); }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   19. BREAKPOINTS
+   Mobile-first: os estilos acima são a base.
+   As media queries abaixo ajustam apenas o que precisa mudar.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1280px — leitura ampla (ponto de partida do max-width do container) ── */
+/* Nenhuma mudança necessária além do container.max-width = 1280px já definido */
+
+/* ── 980px — reduz grades de 3–4 colunas para 2 ────────────────────────── */
+@media (max-width: 980px) {
+	.grid-3,
+	.grid-4 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+/* ── 880px — empilha header, componentes e grade para 1 coluna ──────────── */
+@media (max-width: 880px) {
+	/* Header empilhado */
+	.site-header__inner {
+		flex-direction: column;
+		align-items:    flex-start;
+		gap:            1rem;
+	}
+
+	/* Grades de 2 colunas viram 1 */
+	.grid-2 {
+		grid-template-columns: 1fr;
+	}
+
+	/* Footer empilhado */
+	.site-footer__inner {
+		flex-direction: column;
+		align-items:    flex-start;
+		gap:            1rem;
+	}
+}
+
+/* ── 560px–360px — uma coluna, sem scroll horizontal ───────────────────── */
+@media (max-width: 560px) {
+	/* Grades de 3–4 viram 1 coluna (reforço) */
+	.grid-3,
+	.grid-4 {
+		grid-template-columns: 1fr;
+	}
+
+	/* Nav com gap menor */
+	.site-nav__list {
+		gap: 0.25rem 1rem;
+	}
+
+	/* Botões ocupam largura total em mobile pequeno */
+	.btn-block-mobile {
+		width:          100%;
+		justify-content: center;
+	}
+
+	/* Paginação centralizada */
+	.pagination .nav-links {
+		justify-content: center;
+	}
+}
+
+/* 360px: valida que o layout não quebra no menor viewport alvo */
+@media (max-width: 360px) {
+	body {
+		font-size: 0.9375rem; /* leve redução para cabecear sem overflow */
+	}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   20. PREFERÊNCIA POR MOVIMENTO REDUZIDO
+   Deve ficar no final para sobrescrever transições de componentes.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration:        0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration:       0.01ms !important;
+		scroll-behavior:           auto !important;
+	}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   21. ETAPA 3 — LISTAGENS
+   Componentes: card-article, archive-header, archive-toolbar, cat-filter,
+   search-form-inline, sticky-post, posts-list (extensão), responsividade.
+   Usa exclusivamente variáveis de tokens.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Cabeçalho de listagem (home.php, category.php, search.php) ─────────── */
+
+.archive-header {
+	padding-block:    clamp(2rem, 4vw, 3rem) 0;
+	margin-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.archive-header__title {
+	/* h1 herdado da tipografia global */
+	margin-block-end: 0.4em;
+}
+
+.archive-header__intro {
+	font-family:    var(--serif);
+	font-size:      clamp(1rem, 2vw, 1.125rem);
+	font-weight:    400;
+	color:          var(--slate);
+	max-width:      62ch;
+	margin-block:   0;
+}
+
+.archive-header__subtitle {
+	font-family:    var(--sans);
+	font-size:      0.9375rem;
+	color:          var(--pencil);
+	max-width:      62ch;
+	margin-block:   0.5em 0;
+}
+
+
+/* ── Barra de ferramentas (filtro + busca) ──────────────────────────────── */
+
+.archive-toolbar {
+	display:         flex;
+	flex-wrap:       wrap;
+	align-items:     center;
+	justify-content: space-between;
+	gap:             1rem;
+	margin-block:    clamp(1.5rem, 3vw, 2.5rem);
+}
+
+
+/* ── Filtro por categoria ────────────────────────────────────────────────── */
+
+.cat-filter__list {
+	display:     flex;
+	flex-wrap:   wrap;
+	gap:         0.25rem 0.125rem;
+	align-items: center;
+}
+
+.cat-filter__link {
+	display:         inline-block;
+	font-family:     var(--mono);
+	font-size:       0.625rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.1em;
+	color:           var(--pencil);
+	text-decoration: none;
+	padding:         0.35em 0.7em;
+	border:          1px solid transparent;
+	border-radius:   var(--radius);
+	transition:      color 0.15s ease, border-color 0.15s ease;
+	cursor:          pointer;
+}
+
+a.cat-filter__link:hover,
+a.cat-filter__link:focus-visible {
+	color:        var(--petroleum);
+	border-color: var(--petroleum);
+}
+
+.cat-filter__link--active {
+	color:        var(--petroleum);
+	border-color: var(--petroleum);
+}
+
+.cat-filter__link--inactive {
+	color:  var(--margin);
+	cursor: default;
+}
+
+
+/* ── Busca inline (home.php e search.php) ───────────────────────────────── */
+
+.search-form-inline {
+	display:     flex;
+	align-items: stretch;
+	gap:         0.5rem;
+	flex-wrap:   wrap;
+}
+
+.search-form-inline input[type="search"] {
+	flex:      1 1 10rem;
+	min-width: 0;
+	font-size: 0.875rem;
+	padding:   0.45em 0.75em;
+	width:     auto; /* sobrescreve width:100% do base global */
+}
+
+.search-form-inline .btn {
+	flex-shrink: 0;
+	white-space: nowrap;
+}
+
+/* Contêiner da busca em search.php (com label visível) */
+.search-refine {
+	margin-block: clamp(1.5rem, 3vw, 2rem);
+}
+
+.search-refine > label {
+	display:          block;
+	font-family:      var(--mono);
+	font-size:        0.6875rem;
+	text-transform:   uppercase;
+	letter-spacing:   0.08em;
+	color:            var(--slate);
+	margin-block-end: 0.5em;
+}
+
+
+/* ── Post fixado (sticky-post) ───────────────────────────────────────────── */
+
+.sticky-post {
+	background:          var(--vellum);
+	border-radius:       var(--radius);
+	border-inline-start: 2px solid var(--brass);
+	padding:             clamp(1.25rem, 3vw, 2rem);
+	margin-block:        clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.sticky-post .section-label {
+	margin-block-end: 1rem;
+}
+
+/* Remove bordas/padding extra do card dentro do sticky */
+.sticky-post .card-article {
+	padding-block: 0;
+	border-bottom: none;
+}
+
+
+/* ── Cartão de artigo (card-article) ─────────────────────────────────────── */
+
+.card-article {
+	display:        flex;
+	flex-direction: column;
+	gap:            0;
+	min-width:      0;
+	padding-block:  2.5rem;
+	border-bottom:  1px solid var(--rule);
+}
+
+/* Primeiro cartão da lista: sem padding-top */
+.posts-list__item:first-child .card-article {
+	padding-block-start: 0;
+}
+
+/* Último cartão da lista: sem borda inferior */
+.posts-list__item:last-child .card-article {
+	border-bottom:     none;
+	padding-block-end: 0;
+}
+
+/* Cartão com thumbnail: layout horizontal */
+.card-article--has-thumbnail {
+	flex-direction: row;
+	gap:            clamp(1rem, 3vw, 2rem);
+	align-items:    flex-start;
+}
+
+/* Thumbnail */
+.card-article__thumbnail {
+	flex-shrink: 0;
+	width:       clamp(7rem, 20vw, 11rem);
+	min-width:   0;
+}
+
+.card-article__thumbnail a {
+	display: block;
+}
+
+.card-article__img {
+	display:       block;
+	width:         100%;
+	height:        auto;
+	aspect-ratio:  4 / 3;
+	object-fit:    cover;
+	border-radius: var(--radius);
+}
+
+/* Corpo do cartão */
+.card-article__body {
+	flex:           1;
+	min-width:      0;
+	display:        flex;
+	flex-direction: column;
+}
+
+/* Metadados: categoria + data */
+.card-article__meta {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	margin-block:   0 0.5rem;
+	display:        flex;
+	flex-wrap:      wrap;
+	align-items:    center;
+	gap:            0 0.5rem;
+}
+
+.card-article__cat {
+	color:           var(--petroleum);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.card-article__cat:hover,
+.card-article__cat:focus-visible {
+	color: var(--abyss);
+}
+
+.card-article__meta-sep {
+	color: var(--margin);
+}
+
+.card-article__date {
+	color: var(--pencil);
+}
+
+/* Título do cartão */
+.card-article__title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.125rem, 2.5vw, 1.625rem);
+	font-weight:    600;
+	line-height:    1.25;
+	letter-spacing: -0.01em;
+	color:          var(--graphite);
+	margin-block:   0 0.5rem;
+}
+
+.card-article__title a {
+	color:           var(--graphite);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.card-article__title a:hover,
+.card-article__title a:focus-visible {
+	color: var(--petroleum);
+}
+
+/* Excerpt */
+.card-article__excerpt {
+	font-family:    var(--sans);
+	font-size:      0.9375rem;
+	color:          var(--slate);
+	line-height:    1.65;
+	max-width:      68ch;
+	margin-block:   0 0.75rem;
+}
+
+.card-article__excerpt p {
+	margin-block-end: 0;
+	max-width:        none;
+}
+
+/* Link "Ler artigo" */
+.card-article__read-more {
+	display:            inline-flex;
+	align-items:        center;
+	gap:                0.25em;
+	font-family:        var(--mono);
+	font-size:          0.6875rem;
+	text-transform:     uppercase;
+	letter-spacing:     0.08em;
+	color:              var(--petroleum);
+	text-decoration:    none;
+	margin-block-start: 0.25rem;
+	transition:         color 0.15s ease;
+}
+
+.card-article__read-more:hover,
+.card-article__read-more:focus-visible {
+	color: var(--abyss);
+}
+
+/* Item de lista que envolve o cartão */
+.posts-list__item {
+	list-style: none;
+	min-width:  0;
+}
+
+
+/* ── Responsividade dos componentes de listagem ──────────────────────────── */
+
+/* 980px: barra de ferramentas empilha */
+@media (max-width: 980px) {
+	.archive-toolbar {
+		flex-direction: column;
+		align-items:    flex-start;
+	}
+
+	.search-form-inline {
+		width: 100%;
+	}
+
+	.search-form-inline input[type="search"] {
+		flex: 1 1 auto;
+	}
+}
+
+/* 880px: cartão com imagem volta a layout vertical */
+@media (max-width: 880px) {
+	.card-article--has-thumbnail {
+		flex-direction: column;
+	}
+
+	.card-article__thumbnail {
+		width: 100%;
+	}
+
+	.card-article__img {
+		aspect-ratio: 16 / 9;
+	}
+}
+
+/* 560px: filtro compacto, busca em coluna */
+@media (max-width: 560px) {
+	.cat-filter__list {
+		gap: 0.25rem 0.125rem;
+	}
+
+	.search-form-inline {
+		flex-direction: column;
+	}
+
+	.search-form-inline input[type="search"] {
+		width: 100%;
+	}
+
+	.search-form-inline .btn {
+		width:           100%;
+		justify-content: center;
+	}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   22. ETAPA 4 — CONTEÚDO
+   Componentes: artigo individual, corpo de leitura, relacionados,
+   home editorial (opening, hero, featured, recent, axes, author-block, cta).
+   Usa exclusivamente variáveis de tokens.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ── Artigo individual (single.php) ─────────────────────────────────────── */
+
+.single-article {
+	max-width: 800px;
+	margin-inline: auto;
+}
+
+/* Cabeçalho do artigo: categoria + data (metadados mono) */
+.entry-header__meta {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	display:        flex;
+	flex-wrap:      wrap;
+	align-items:    center;
+	gap:            0 0.5rem;
+	margin-block:   0 0.75rem;
+}
+
+.entry-header__cat {
+	color:           var(--petroleum);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.entry-header__cat:hover,
+.entry-header__cat:focus-visible {
+	color: var(--abyss);
+}
+
+.entry-header__meta-sep {
+	color: var(--margin);
+}
+
+.entry-header__date {
+	color: var(--pencil);
+}
+
+/* Imagem de abertura do artigo — sobrescreve .entry-thumbnail da Etapa 2
+   para garantir sem padding lateral no container estreito */
+.single-article .entry-thumbnail {
+	margin-block:  clamp(1.5rem, 3vw, 2.5rem);
+	border-radius: var(--radius);
+	overflow:      hidden;
+}
+
+.single-article .entry-thumbnail__img {
+	display:    block;
+	width:      100%;
+	height:     auto;
+	object-fit: cover;
+}
+
+
+/* ── Corpo de leitura (content-single.php) ───────────────────────────────── */
+
+.entry-body {
+	margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* .entry-content já definida na seção 14; extensão pontual abaixo */
+
+/* Largura editorial confortável para leitura longa */
+.entry-body .entry-content {
+	max-width: 68ch;
+}
+
+/* Navegação de páginas múltiplas dentro de um post */
+.entry-pages {
+	margin-block-start: 2rem;
+	padding-block-start: 1.5rem;
+	border-block-start: 1px solid var(--rule);
+}
+
+.entry-pages__label {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	margin-block-end: 0.5rem;
+}
+
+.entry-pages__link {
+	display:         inline-block;
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	margin-inline-end: 0.5rem;
+}
+
+
+/* ── Leitura relacionada (related-posts.php) ─────────────────────────────── */
+
+.related-posts {
+	margin-block-start: clamp(2rem, 4vw, 3rem);
+}
+
+.related-posts__header {
+	margin-block-end: clamp(1rem, 2vw, 1.5rem);
+}
+
+.related-posts__list {
+	/* Herda .posts-list (flex-direction: column) */
+}
+
+/* Primeiro cartão de relacionados: sem padding-top */
+.related-posts__item:first-child .card-article {
+	padding-block-start: 0;
+}
+
+/* Último cartão de relacionados: sem borda inferior */
+.related-posts__item:last-child .card-article {
+	border-bottom:     none;
+	padding-block-end: 0;
+}
+
+
+/* ── Home editorial — estrutura geral ────────────────────────────────────── */
+
+.home-main {
+	padding-block: 0; /* Cada seção gerencia seu próprio ritmo vertical */
+}
+
+.home-section {
+	padding-block: var(--space-section);
+}
+
+.home-section + .home-section {
+	padding-block-start: 0;
+}
+
+
+/* ── Bloco 1: Abertura editorial (home-opening) ───────────────────────────── */
+
+.home-opening {
+	padding-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.home-opening__header {
+	max-width: 760px;
+}
+
+.home-opening__title {
+	/* h1 herdado da tipografia global; nenhum override necessário */
+	margin-block-end: 0.5em;
+}
+
+.home-opening__text {
+	/* .lede já definido na seção 4 de main.css */
+	margin-block-end: 0;
+}
+
+
+/* ── Bloco 2: Imagem editorial de abertura (home-hero) ───────────────────── */
+
+.home-hero {
+	padding-block: clamp(1rem, 2vw, 1.5rem);
+}
+
+.home-hero__frame {
+	border-radius: var(--radius);
+	overflow:      hidden;
+}
+
+/* Placeholder visual sóbrio — visível enquanto não houver imagem real.
+   Tom Vellum com filete Brass discreto na borda superior. */
+.home-hero__placeholder {
+	background:          var(--vellum);
+	border-block-start:  2px solid var(--brass);
+	border-radius:       var(--radius);
+	height:              clamp(180px, 28vw, 360px);
+	width:               100%;
+}
+
+
+/* ── Bloco 3: Artigo em destaque (home-featured) ────────────────────────── */
+
+.home-featured {
+	padding-block-start: 0;
+}
+
+.home-featured__article {
+	display:   grid;
+	gap:       clamp(1.5rem, 3vw, 2.5rem);
+	min-width: 0;
+}
+
+/* Com imagem: layout lado a lado em telas maiores */
+.home-featured__article:has(.home-featured__thumbnail) {
+	grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+	align-items: start;
+}
+
+.home-featured__thumbnail {
+	min-width: 0;
+}
+
+.home-featured__thumbnail a {
+	display: block;
+}
+
+.home-featured__img {
+	display:       block;
+	width:         100%;
+	height:        auto;
+	aspect-ratio:  4 / 3;
+	object-fit:    cover;
+	border-radius: var(--radius);
+}
+
+.home-featured__body {
+	min-width: 0;
+	display:   flex;
+	flex-direction: column;
+}
+
+/* Metadados: categoria + data */
+.home-featured__meta {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	display:        flex;
+	flex-wrap:      wrap;
+	align-items:    center;
+	gap:            0 0.5rem;
+	margin-block:   0 0.75rem;
+}
+
+.home-featured__cat {
+	color:           var(--petroleum);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.home-featured__cat:hover,
+.home-featured__cat:focus-visible {
+	color: var(--abyss);
+}
+
+.home-featured__meta-sep {
+	color: var(--margin);
+}
+
+.home-featured__date {
+	color: var(--pencil);
+}
+
+/* Título do destaque — hierarquia h2, menor que o h1 da abertura */
+.home-featured__title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.5rem, 3.5vw, 2.25rem);
+	font-weight:    600;
+	line-height:    1.2;
+	letter-spacing: -0.015em;
+	color:          var(--graphite);
+	margin-block:   0 0.5em;
+}
+
+.home-featured__title a {
+	color:           var(--graphite);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.home-featured__title a:hover,
+.home-featured__title a:focus-visible {
+	color: var(--petroleum);
+}
+
+/* Excerpt do destaque */
+.home-featured__excerpt {
+	font-family:    var(--serif);
+	font-size:      clamp(1rem, 2vw, 1.125rem);
+	font-weight:    400;
+	line-height:    1.6;
+	color:          var(--slate);
+	max-width:      60ch;
+	margin-block:   0 1rem;
+}
+
+/* Link "Ler artigo" */
+.home-featured__read-more {
+	display:         inline-flex;
+	align-items:     center;
+	gap:             0.25em;
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	color:           var(--petroleum);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+	margin-block-start: auto; /* empurra para baixo no flex column */
+}
+
+.home-featured__read-more:hover,
+.home-featured__read-more:focus-visible {
+	color: var(--abyss);
+}
+
+
+/* ── Bloco 4: Artigos recentes (home-recent) ─────────────────────────────── */
+
+.home-recent__header {
+	margin-block-end: clamp(1rem, 2vw, 1.5rem);
+}
+
+/* Link "Ver todos os artigos" */
+.home-recent__archive-link {
+	margin-block-start: 1.5rem;
+	padding-block-start: 1.5rem;
+	border-block-start:  1px solid var(--rule);
+}
+
+.home-recent__archive-link-anchor {
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	color:           var(--petroleum);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.home-recent__archive-link-anchor:hover,
+.home-recent__archive-link-anchor:focus-visible {
+	color: var(--abyss);
+}
+
+
+/* ── Bloco 5: Eixos editoriais (home-axes) ───────────────────────────────── */
+
+.home-axes__header {
+	margin-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.home-axes__title {
+	/* h2 herdado da tipografia global */
+	margin-block-end: 0;
+}
+
+.home-axes__list {
+	display:              grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+	gap:                  clamp(1rem, 2.5vw, 1.75rem);
+	list-style:           none;
+	padding-inline-start: 0;
+	margin-block-end:     0;
+}
+
+.home-axes__item {
+	min-width: 0;
+}
+
+.home-axes__card {
+	border-block-start: 2px solid var(--rule-strong);
+	padding-block-start: 1.25rem;
+	height:              100%;
+}
+
+/* Nome da categoria — h3; sem link quando a cat não existe no banco */
+.home-axes__name {
+	font-family:    var(--serif);
+	font-size:      clamp(1.0625rem, 2vw, 1.25rem);
+	font-weight:    600;
+	letter-spacing: -0.01em;
+	margin-block:   0 0.4em;
+}
+
+.home-axes__link {
+	color:           var(--graphite);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.home-axes__link:hover,
+.home-axes__link:focus-visible {
+	color: var(--petroleum);
+}
+
+.home-axes__name--no-link {
+	color: var(--graphite);
+}
+
+.home-axes__subtitle {
+	font-family:    var(--sans);
+	font-size:      0.875rem;
+	color:          var(--pencil);
+	line-height:    1.55;
+	margin-block:   0;
+	max-width:      40ch;
+}
+
+
+/* ── Bloco 6: Author block (author-block.php) ────────────────────────────── */
+
+.author-block {
+	max-width: 680px;
+}
+
+.author-block__content {
+	margin-block-start: 0.75rem;
+}
+
+.author-block__text {
+	font-family:    var(--serif);
+	font-size:      clamp(1rem, 2vw, 1.125rem);
+	font-weight:    400;
+	line-height:    1.65;
+	color:          var(--slate);
+	max-width:      62ch;
+	margin-block-end: 1rem;
+}
+
+.author-block__link {
+	font-family:     var(--mono);
+	font-size:       0.6875rem;
+	text-transform:  uppercase;
+	letter-spacing:  0.08em;
+	color:           var(--petroleum);
+	text-decoration: none;
+	transition:      color 0.15s ease;
+}
+
+.author-block__link:hover,
+.author-block__link:focus-visible {
+	color: var(--abyss);
+}
+
+
+/* ── Bloco 7: Chamada de contato (home-cta) ──────────────────────────────── */
+
+.home-cta {
+	max-width: 600px;
+}
+
+.home-cta__title {
+	/* h2 herdado da tipografia global */
+	margin-block: 0.5em 0.75rem;
+}
+
+.home-cta__text {
+	font-family:    var(--serif);
+	font-size:      clamp(1rem, 2vw, 1.125rem);
+	font-weight:    400;
+	line-height:    1.65;
+	color:          var(--slate);
+	max-width:      58ch;
+	margin-block-end: 1.5rem;
+}
+
+.home-cta__note {
+	font-family:    var(--mono);
+	font-size:      0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color:          var(--pencil);
+	margin-block:   0;
+}
+
+
+/* ── Responsividade dos componentes da Etapa 4 ───────────────────────────── */
+
+/* 980px: destaque volta a coluna única */
+@media (max-width: 980px) {
+	.home-featured__article:has(.home-featured__thumbnail) {
+		grid-template-columns: 1fr;
+	}
+
+	.home-featured__img {
+		aspect-ratio: 16 / 9;
+	}
+}
+
+/* 880px: eixos em 2 colunas (já garantido pelo auto-fill, mas reforço) */
+@media (max-width: 880px) {
+	.home-axes__list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+/* 560px: eixos em 1 coluna */
+@media (max-width: 560px) {
+	.home-axes__list {
+		grid-template-columns: 1fr;
+	}
+
+	.single-article {
+		max-width: 100%;
+	}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   23. ETAPA 5 — PÁGINAS E CAPTAÇÃO
+   Estilos específicos para o formulário de contato, mensagens de feedback,
+   bloco de newsletter Substack e customizações de páginas.
+   Usa exclusivamente variáveis de tokens.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Formulário de Contato (.contact-form) ───────────────────────────────── */
+
+.contact-form {
+	display:        flex;
+	flex-direction: column;
+	gap:            1.25rem;
+	margin-block:   clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.contact-form__group {
+	display:        flex;
+	flex-direction: column;
+}
+
+/* Honeypot escondido de forma acessível mas invisível a humanos */
+.contact-form__honeypot {
+	display:  none !important;
+	position: absolute;
+	width:    0;
+	height:   0;
+	overflow: hidden;
+}
+
+/* Retornos e alertas de feedback */
+.form-feedback {
+	padding:       1rem 1.25rem;
+	border-radius: var(--radius);
+	font-family:   var(--sans);
+	font-size:     0.9375rem;
+	line-height:   1.5;
+	margin-block:  1.5rem;
+}
+
+.form-feedback p {
+	margin:    0;
+	max-width: none;
+}
+
+.form-feedback--success {
+	background:   var(--vellum);
+	border-left:  3px solid var(--petroleum);
+	color:        var(--petroleum);
+}
+
+.form-feedback--error {
+	background:   var(--dustcover);
+	border-left:  3px solid var(--brass);
+	color:        var(--graphite);
+}
+
+/* ── Newsletter Substack (.newsletter-block) ────────────────────────────── */
+
+.newsletter-block {
+	background:    var(--vellum);
+	border-radius: var(--radius);
+	padding:       clamp(1.5rem, 4vw, 2.5rem);
+	margin-block:  clamp(2rem, 5vw, 3.5rem);
+}
+
+/* Contexto inline (fim do artigo) */
+.newsletter-block--inline {
+	background:          transparent;
+	border:              none;
+	border-top:          1px solid var(--rule-strong);
+	border-bottom:       1px solid var(--rule-strong);
+	border-radius:       0;
+	padding-inline:      0;
+	margin-block:        clamp(2rem, 4vw, 3rem);
+}
+
+.newsletter-block__label {
+	/* meta styling herdado */
+	margin-block-end: 0.5rem;
+}
+
+.newsletter-block__title {
+	font-family:    var(--serif);
+	font-size:      clamp(1.25rem, 3vw, 1.75rem);
+	font-weight:    600;
+	line-height:    1.2;
+	color:          var(--graphite);
+	margin-block:   0 0.5rem;
+}
+
+.newsletter-block__desc {
+	font-family:    var(--sans);
+	font-size:      0.9375rem;
+	color:          var(--slate);
+	line-height:    1.6;
+	max-width:      60ch;
+	margin-block:   0 1.5rem;
+}
+
+.newsletter-block__field-label {
+	margin-block-end: 0.5rem;
+}
+
+.newsletter-block__input-row {
+	display:        flex;
+	gap:            0.5rem;
+	align-items:    stretch;
+}
+
+.newsletter-block__input {
+	flex:      1;
+	min-width: 0;
+	font-size: 0.875rem;
+}
+
+.newsletter-block__btn {
+	flex-shrink: 0;
+	white-space: nowrap;
+}
+
+.newsletter-block__alt {
+	font-family:       var(--mono);
+	font-size:         0.6125rem;
+	text-transform:    uppercase;
+	letter-spacing:    0.08em;
+	color:             var(--pencil);
+	margin-block-start: 1rem;
+	margin-block-end:  0;
+}
+
+.newsletter-block__alt-link {
+	color:           var(--slate);
+	text-decoration: underline;
+}
+
+.newsletter-block__alt-link:hover {
+	color: var(--petroleum);
+}
+
+.newsletter-block__pending {
+	font-family:    var(--sans);
+	font-size:      0.875rem;
+	color:          var(--pencil);
+	margin:         0;
+}
+
+/* ── Página 404 e Layout Centralizado ────────────────────────────────────── */
+
+.error-404 {
+	padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+.error-404__label {
+	margin-block-end: 0.75rem;
+}
+
+.error-404__actions {
+	margin-block-start: 2rem;
+}
+
+/* ── Responsividade da Etapa 5 ───────────────────────────────────────────── */
+
+@media (max-width: 560px) {
+	.newsletter-block__input-row {
+		flex-direction: column;
+	}
+
+	.newsletter-block__btn {
+		width:           100%;
+		justify-content: center;
+	}
+
+	.error-404__actions {
+		flex-direction: column;
+		width:          100%;
+	}
+
+	.error-404__actions .btn {
+		width:           100%;
+		justify-content: center;
+	}
+}
