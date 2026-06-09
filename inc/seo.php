@@ -35,16 +35,34 @@ function codice_filter_document_title_parts( $title ) {
 		return $title;
 	}
 
-	if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
-		$title['title'] = esc_html__( 'Manutenção', 'codice' );
+	// Remove a tagline (descrição do site) de todas as páginas para evitar duplicações/poluição no título
+	if ( isset( $title['tagline'] ) ) {
+		unset( $title['tagline'] );
 	}
 
-	// A saída nativa do WP já é otimizada e o title-tag já está ativo no setup.php.
-	// O filtro serve como hook defensivo/extensivo caso a arquitetura exija
-	// formatação específica de separadores futuramente.
+	if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
+		$title['title'] = esc_html__( 'Manutenção', 'codice' );
+		$title['site']  = get_bloginfo( 'name' );
+	} elseif ( is_search() ) {
+		$title['title'] = esc_html__( 'Busca', 'codice' );
+	} elseif ( is_404() ) {
+		$title['title'] = esc_html__( 'Página não encontrada', 'codice' );
+	}
+
 	return $title;
 }
 add_filter( 'document_title_parts', 'codice_filter_document_title_parts' );
+
+/**
+ * Altera o caractere separador das partes do título do documento.
+ *
+ * @param string $sep Separador padrão.
+ * @return string Novo separador.
+ */
+function codice_document_title_separator( $sep ) {
+	return '—';
+}
+add_filter( 'document_title_separator', 'codice_document_title_separator' );
 
 /**
  * Adiciona as meta tags básicas no <head>.
@@ -70,8 +88,18 @@ function codice_add_seo_meta_tags() {
 
 		if ( has_excerpt() ) {
 			$description = wp_strip_all_tags( get_the_excerpt() );
-		} else {
+		} elseif ( ! empty( $post->post_content ) ) {
 			$description = wp_trim_words( wp_strip_all_tags( $post->post_content ), 30, '…' );
+		}
+
+		// Fallback para a descrição do blog se o conteúdo e o resumo estiverem vazios
+		if ( empty( $description ) ) {
+			$description = wp_strip_all_tags( get_bloginfo( 'description' ) );
+		}
+
+		// Segundo fallback com a descrição padrão fixa do tema
+		if ( empty( $description ) ) {
+			$description = esc_html__( 'Ensaios, análises e reflexões sobre conteúdo, comunicação, eventos, IA e ecossistema editorial.', 'codice' );
 		}
 
 		if ( is_single() ) {
