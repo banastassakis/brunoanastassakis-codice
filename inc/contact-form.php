@@ -105,7 +105,7 @@ function codice_contact_form_render( $args = array() ) {
 				type="text"
 				id="contact-name"
 				name="codice_name"
-				value="<?php echo $val_name; ?>"
+				value="<?php echo esc_attr( $val_name ); ?>"
 				required
 				autocomplete="name"
 				aria-required="true"
@@ -120,7 +120,7 @@ function codice_contact_form_render( $args = array() ) {
 				type="email"
 				id="contact-email"
 				name="codice_email"
-				value="<?php echo $val_email; ?>"
+				value="<?php echo esc_attr( $val_email ); ?>"
 				required
 				autocomplete="email"
 				aria-required="true"
@@ -135,7 +135,7 @@ function codice_contact_form_render( $args = array() ) {
 				type="text"
 				id="contact-subject"
 				name="codice_subject"
-				value="<?php echo $val_subject; ?>"
+				value="<?php echo esc_attr( $val_subject ); ?>"
 				required
 				aria-required="true"
 			>
@@ -151,7 +151,7 @@ function codice_contact_form_render( $args = array() ) {
 				rows="7"
 				required
 				aria-required="true"
-			><?php echo $val_message; ?></textarea>
+			><?php echo esc_textarea( $val_message ); ?></textarea>
 		</div>
 
 		<div class="contact-form__submit">

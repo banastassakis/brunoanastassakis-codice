@@ -33,7 +33,8 @@ $RequiredZipEntries = @(
 	'theme.json',
 	'inc/',
 	'template-parts/',
-	'assets/'
+	'assets/',
+	'screenshot.png'
 )
 
 $ForbiddenZipEntries = @(

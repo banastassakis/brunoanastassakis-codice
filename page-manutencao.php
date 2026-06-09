@@ -15,6 +15,8 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 } else {
 	status_header( 200 );
 }
+
+$site_name        = get_bloginfo( 'name' );
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -32,35 +34,60 @@ if ( defined( 'CODICE_MAINTENANCE_MODE' ) && CODICE_MAINTENANCE_MODE && ! curren
 <main id="conteudo" class="site-main maintenance-main" role="main" tabindex="-1">
 	<div class="maintenance-layout">
 		<section class="maintenance-screen" aria-labelledby="maintenance-title">
-			<p class="maintenance-screen__label"><?php esc_html_e( 'MANUTENÇÃO', 'codice' ); ?></p>
-			<h1 id="maintenance-title" class="maintenance-screen__title">
-				<?php esc_html_e( 'Este espaço está sendo preparado.', 'codice' ); ?>
-			</h1>
-			<h2 id="maintenance-contact-title" class="maintenance-screen__text">
-				<?php esc_html_e( 'Contatos:', 'codice' ); ?>
-			</h2>
+			<div class="maintenance-screen__top">
+				<header class="maintenance-identity">
+					<p class="maintenance-identity__name">
+						<?php echo esc_html( $site_name ); ?>
+						<span class="maintenance-identity__separator" aria-hidden="true">|</span>
+						<span class="maintenance-identity__status"><?php esc_html_e( 'EM MANUTENÇÃO', 'codice' ); ?></span>
+					</p>
+				</header>
+			</div>
 
-			<div class="maintenance-contact" aria-labelledby="maintenance-contact-title">
-				<ul class="maintenance-contact__list list-bare">
-					<li class="maintenance-contact__item">
-						<a class="maintenance-contact__link" href="<?php echo esc_url( 'mailto:contato@brunoanastassakis.com' ); ?>">
-							<span><?php esc_html_e( 'E-mail:', 'codice' ); ?></span>
-							<span>contato@brunoanastassakis.com</span>
-						</a>
-					</li>
-					<li class="maintenance-contact__item">
-						<a class="maintenance-contact__link" href="<?php echo esc_url( 'https://www.linkedin.com/in/brunoanastassakis/' ); ?>" target="_blank" rel="noopener noreferrer">
-							<span><?php esc_html_e( 'LinkedIn:', 'codice' ); ?></span>
-							<span>linkedin.com/in/brunoanastassakis</span>
-						</a>
-					</li>
-					<li class="maintenance-contact__item">
-						<a class="maintenance-contact__link" href="<?php echo esc_url( 'https://wa.me/5521986957214' ); ?>" target="_blank" rel="noopener noreferrer">
-							<span><?php esc_html_e( 'WhatsApp:', 'codice' ); ?></span>
-							<span>+55 21 98695-7214</span>
-						</a>
-					</li>
-				</ul>
+			<div class="maintenance-screen__center">
+				<h1 id="maintenance-title" class="maintenance-screen__title">
+					<?php esc_html_e( 'Este espaço está sendo preparado.', 'codice' ); ?>
+				</h1>
+			</div>
+
+			<div class="maintenance-screen__bottom">
+				<div class="maintenance-contact" aria-label="<?php esc_attr_e( 'Canais de contato', 'codice' ); ?>">
+					<ul class="maintenance-contact__list list-bare">
+						<li class="maintenance-contact__item">
+							<a class="maintenance-contact__link" href="<?php echo esc_url( 'mailto:contato@brunoanastassakis.com' ); ?>">
+								<span class="maintenance-contact__icon" aria-hidden="true">
+									<svg viewBox="0 0 24 24" focusable="false">
+										<rect x="3" y="5" width="18" height="14" rx="2" />
+										<path d="M3 7l9 6 9-6" />
+									</svg>
+								</span>
+								<span class="maintenance-contact__label"><?php esc_html_e( 'E-mail', 'codice' ); ?></span>
+							</a>
+						</li>
+						<li class="maintenance-contact__item">
+							<a class="maintenance-contact__link" href="<?php echo esc_url( 'https://www.linkedin.com/in/brunoanastassakis/' ); ?>" target="_blank" rel="noopener noreferrer">
+								<span class="maintenance-contact__icon" aria-hidden="true">
+									<svg viewBox="0 0 24 24" focusable="false">
+										<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+										<rect x="2" y="9" width="4" height="12" />
+										<circle cx="4" cy="4" r="2" />
+									</svg>
+								</span>
+								<span class="maintenance-contact__label"><?php esc_html_e( 'LinkedIn', 'codice' ); ?></span>
+							</a>
+						</li>
+						<li class="maintenance-contact__item">
+							<a class="maintenance-contact__link" href="<?php echo esc_url( 'https://wa.me/5521986957214' ); ?>" target="_blank" rel="noopener noreferrer">
+								<span class="maintenance-contact__icon" aria-hidden="true">
+									<svg viewBox="0 0 24 24" focusable="false">
+										<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+									</svg>
+								</span>
+								<span class="maintenance-contact__label"><?php esc_html_e( 'WhatsApp', 'codice' ); ?></span>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</section>
 		<figure class="maintenance-visual">
