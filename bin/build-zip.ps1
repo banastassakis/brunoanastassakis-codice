@@ -125,6 +125,16 @@ try {
 	try {
 		$Archive = New-Object System.IO.Compression.ZipArchive($ZipStream, [System.IO.Compression.ZipArchiveMode]::Create)
 		try {
+			$RootEntryName = "$ThemeSlug/"
+			$null = $Archive.CreateEntry($RootEntryName)
+
+			Get-ChildItem -LiteralPath $StageTheme -Recurse -Directory | ForEach-Object {
+				$DirectoryPath = $_.FullName
+				$RelativePath = $DirectoryPath.Substring($TempRoot.Length + 1)
+				$ZipEntryName = $RelativePath.Replace('\', '/').TrimEnd('/') + '/'
+				$null = $Archive.CreateEntry($ZipEntryName)
+			}
+
 			Get-ChildItem -LiteralPath $StageTheme -Recurse -File | ForEach-Object {
 				$FilePath = $_.FullName
 				# O caminho relativo deve começar com $ThemeSlug/
