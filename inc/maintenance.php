@@ -81,7 +81,7 @@ function codice_is_maintenance_request() {
 		return true;
 	}
 
-	return is_page( 'manutencao' );
+	return is_page( 'manutencao' ) && ! is_front_page();
 }
 
 /**

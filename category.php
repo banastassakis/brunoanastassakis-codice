@@ -38,6 +38,11 @@ if ( ! $cat_desc ) {
 ?>
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
 	<div class="container">
+		<?php
+		if ( function_exists( 'codice_render_breadcrumbs' ) ) {
+			codice_render_breadcrumbs();
+		}
+		?>
 
 		<!-- ── Cabeçalho da categoria ──────────────────────────────────────── -->
 
@@ -97,7 +102,7 @@ if ( ! $cat_desc ) {
 					<?php esc_html_e( 'Os artigos aparecerão aqui assim que forem publicados.', 'codice' ); ?>
 				</p>
 				<div class="empty-state__action">
-					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn-text">
+					<a href="<?php echo esc_url( function_exists( 'codice_get_posts_index_url' ) ? codice_get_posts_index_url() : home_url( '/artigos/' ) ); ?>" class="btn-text">
 						<?php esc_html_e( '← Ver todos os artigos', 'codice' ); ?>
 					</a>
 				</div>

@@ -15,6 +15,11 @@ get_header();
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
 	<div class="container-reading">
 		<?php
+		if ( function_exists( 'codice_render_breadcrumbs' ) ) {
+			codice_render_breadcrumbs();
+		}
+		?>
+		<?php
 		while ( have_posts() ) :
 			the_post();
 

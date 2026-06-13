@@ -27,6 +27,11 @@ get_header();
 		if ( have_posts() ) :
 			the_post();
 			?>
+			<?php
+			if ( function_exists( 'codice_render_breadcrumbs' ) ) {
+				codice_render_breadcrumbs();
+			}
+			?>
 
 			<article id="post-<?php echo esc_attr( get_the_ID() ); ?>" <?php post_class( 'single-article' ); ?>>
 
@@ -43,6 +48,12 @@ get_header();
 						$cat_name = $categories[0]->name;
 						$cat_link = get_category_link( $categories[0]->term_id );
 					}
+					$author_name     = get_the_author();
+					$published_iso   = get_the_date( 'Y-m-d' );
+					$published_label = get_the_date();
+					$modified_iso    = get_the_modified_date( 'Y-m-d' );
+					$modified_label  = get_the_modified_date();
+					$show_modified   = $modified_iso && $modified_iso !== $published_iso;
 					?>
 
 					<p class="entry-header__meta">
@@ -55,8 +66,29 @@ get_header();
 						<?php endif; ?>
 						<time
 							class="entry-header__date"
-							datetime="<?php echo esc_attr( get_the_date( 'Y-m-d' ) ); ?>"
-						><?php echo esc_html( get_the_date() ); ?></time>
+							datetime="<?php echo esc_attr( $published_iso ); ?>"
+						><?php echo esc_html( $published_label ); ?></time>
+						<?php if ( $show_modified ) : ?>
+							<span class="entry-header__meta-sep" aria-hidden="true"> &middot; </span>
+							<span class="entry-header__modified">
+								<?php esc_html_e( 'Atualizado em', 'codice' ); ?>
+								<time datetime="<?php echo esc_attr( $modified_iso ); ?>">
+									<?php echo esc_html( $modified_label ); ?>
+								</time>
+							</span>
+						<?php endif; ?>
+						<?php if ( $author_name ) : ?>
+							<span class="entry-header__meta-sep" aria-hidden="true"> &middot; </span>
+							<span class="entry-header__author">
+								<?php
+								printf(
+									/* translators: %s: nome do autor. */
+									esc_html__( 'Por %s', 'codice' ),
+									esc_html( $author_name )
+								);
+								?>
+							</span>
+						<?php endif; ?>
 					</p>
 
 					<!-- ── Título: único h1 da página ─────────────────────── -->
@@ -92,10 +124,12 @@ get_header();
 						the_post_thumbnail(
 							'large',
 							array(
-								'class'    => 'entry-thumbnail__img',
-								'loading'  => 'eager',
-								'decoding' => 'async',
-								'alt'      => $thumbnail_alt,
+								'class'         => 'entry-thumbnail__img',
+								'loading'       => 'eager',
+								'decoding'      => 'async',
+								'fetchpriority' => 'high',
+								'sizes'         => '(max-width: 880px) calc(100vw - 2rem), 800px',
+								'alt'           => $thumbnail_alt,
 							)
 						);
 						?>

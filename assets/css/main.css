@@ -200,7 +200,7 @@ h6 {
 	font-family:    var(--serif);
 	font-weight:    600;
 	line-height:    1.2;
-	letter-spacing: -0.01em;
+	letter-spacing: 0;
 	color:          var(--graphite);
 	margin-block-start: 0;
 	margin-block-end:   0.5em;
@@ -1351,6 +1351,56 @@ label {
 	border-color: transparent;
 	cursor:       default;
 	color:        var(--pencil);
+}
+
+.breadcrumbs {
+	margin-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.breadcrumbs__list {
+	display:     flex;
+	flex-wrap:   wrap;
+	align-items: center;
+	gap:         0.35rem 0.5rem;
+	padding:     0;
+	margin:      0;
+	list-style:  none;
+	min-width:   0;
+}
+
+.breadcrumbs__item {
+	display:     inline-flex;
+	align-items: center;
+	min-width:   0;
+	font-family: var(--mono);
+	font-size:   0.6875rem;
+	line-height: 1.5;
+	color:       var(--pencil);
+}
+
+.breadcrumbs__item:not(:last-child)::after {
+	content:             "/";
+	margin-inline-start: 0.5rem;
+	color:               var(--margin);
+}
+
+.breadcrumbs__link {
+	color:           var(--petroleum);
+	text-decoration: none;
+}
+
+.breadcrumbs__link:hover,
+.breadcrumbs__link:focus-visible {
+	color:           var(--abyss);
+	text-decoration: underline;
+}
+
+.breadcrumbs__current {
+	color:         var(--pencil);
+	overflow:      hidden;
+	text-overflow: ellipsis;
+	white-space:   nowrap;
+	max-width:     min(42ch, 100%);
 }
 
 

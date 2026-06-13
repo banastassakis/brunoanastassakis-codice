@@ -53,6 +53,7 @@ if ( ! empty( $categories ) ) {
 					array(
 						'class'   => 'card-article__img',
 						'loading' => 'lazy',
+						'sizes'   => '(max-width: 880px) calc(100vw - 2rem), 320px',
 						'alt'     => the_title_attribute( array( 'echo' => false ) ),
 					)
 				);

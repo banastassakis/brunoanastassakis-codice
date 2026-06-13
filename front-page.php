@@ -168,6 +168,7 @@ $contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : home_url( '
 										array(
 											'class'   => 'home-featured__img',
 											'loading' => 'lazy',
+											'sizes'   => '(max-width: 980px) calc(100vw - 2rem), 480px',
 										)
 									);
 									?>

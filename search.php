@@ -24,6 +24,11 @@ $search_query = get_search_query();
 ?>
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
 	<div class="container">
+		<?php
+		if ( function_exists( 'codice_render_breadcrumbs' ) ) {
+			codice_render_breadcrumbs();
+		}
+		?>
 
 		<!-- ── Cabeçalho dos resultados ────────────────────────────────────── -->
 

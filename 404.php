@@ -45,7 +45,7 @@ get_header();
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn">
 						<?php esc_html_e( 'Página Inicial', 'codice' ); ?>
 					</a>
-					<a href="<?php echo esc_url( get_post_type_archive_link( 'post' ) ? get_post_type_archive_link( 'post' ) : home_url( '/artigos/' ) ); ?>" class="btn btn-ghost">
+					<a href="<?php echo esc_url( function_exists( 'codice_get_posts_index_url' ) ? codice_get_posts_index_url() : home_url( '/artigos/' ) ); ?>" class="btn btn-ghost">
 						<?php esc_html_e( 'Todos os Artigos', 'codice' ); ?>
 					</a>
 				</div>

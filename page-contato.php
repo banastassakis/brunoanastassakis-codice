@@ -23,6 +23,11 @@ $linkedin_url  = function_exists( 'codice_get_linkedin_url' ) ? codice_get_linke
 
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
 	<div class="container-reading">
+		<?php
+		if ( function_exists( 'codice_render_breadcrumbs' ) ) {
+			codice_render_breadcrumbs();
+		}
+		?>
 		<article class="page-contato">
 			<header class="entry-header">
 				<span class="meta entry-header__label"><?php esc_html_e( 'Conversa', 'codice' ); ?></span>

@@ -80,6 +80,11 @@ if ( $sticky_id ) {
 ?>
 <main id="conteudo" class="site-main" role="main" tabindex="-1">
 	<div class="container">
+		<?php
+		if ( function_exists( 'codice_render_breadcrumbs' ) ) {
+			codice_render_breadcrumbs();
+		}
+		?>
 
 		<!-- ── Cabeçalho da página ─────────────────────────────────────────── -->
 
