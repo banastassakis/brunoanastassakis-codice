@@ -25,6 +25,15 @@
  * @package codice
  */
 
+if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
+	$maintenance_template = locate_template( 'page-manutencao.php' );
+
+	if ( $maintenance_template ) {
+		require $maintenance_template;
+		return;
+	}
+}
+
 get_header();
 
 // ── Dados auxiliares usados em múltiplos blocos ─────────────────────────────

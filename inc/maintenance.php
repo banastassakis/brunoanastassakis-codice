@@ -68,9 +68,52 @@ function codice_request_path_is_maintenance() {
 }
 
 /**
+ * Returns the configured maintenance page, when it exists in WordPress.
+ *
+ * @return WP_Post|null Maintenance page object or null.
+ */
+function codice_get_maintenance_page() {
+	$page = get_page_by_path( 'manutencao', OBJECT, 'page' );
+
+	return $page instanceof WP_Post ? $page : null;
+}
+
+/**
+ * Checks whether a page ID belongs to the maintenance page.
+ *
+ * @param int $page_id Page ID to inspect.
+ * @return bool True when the ID matches the maintenance page.
+ */
+function codice_is_maintenance_page_id( $page_id ) {
+	$page_id = (int) $page_id;
+
+	if ( $page_id <= 0 ) {
+		return false;
+	}
+
+	$maintenance_page = codice_get_maintenance_page();
+
+	return $maintenance_page instanceof WP_Post && (int) $maintenance_page->ID === $page_id;
+}
+
+/**
+ * Checks whether the static front page is the maintenance page.
+ *
+ * @return bool True when page_on_front points to the maintenance page.
+ */
+function codice_is_maintenance_front_page() {
+	if ( 'page' !== get_option( 'show_on_front' ) ) {
+		return false;
+	}
+
+	return codice_is_maintenance_page_id( (int) get_option( 'page_on_front' ) );
+}
+
+/**
  * Checks whether the current request is the public maintenance screen.
  *
- * @return bool True for /manutencao or the maintenance query var.
+ * @return bool True for /manutencao, the maintenance query var or the
+ *              maintenance page when it is configured as the static front page.
  */
 function codice_is_maintenance_request() {
 	if ( codice_request_path_is_maintenance() ) {
@@ -81,7 +124,13 @@ function codice_is_maintenance_request() {
 		return true;
 	}
 
-	return is_page( 'manutencao' ) && ! is_front_page();
+	if ( is_front_page() && codice_is_maintenance_front_page() ) {
+		return true;
+	}
+
+	$queried_object_id = (int) get_queried_object_id();
+
+	return is_page() && codice_is_maintenance_page_id( $queried_object_id );
 }
 
 /**
