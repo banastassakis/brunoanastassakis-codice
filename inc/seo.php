@@ -108,6 +108,14 @@ function codice_get_meta_description() {
 			return $description;
 		}
 
+		$category = get_queried_object();
+		if ( $category instanceof WP_Term && function_exists( 'codice_get_category_by_slug' ) ) {
+			$canonical_category = codice_get_category_by_slug( $category->slug );
+			if ( ! empty( $canonical_category['description'] ) ) {
+				return codice_normalize_meta_description( $canonical_category['description'] );
+			}
+		}
+
 		/* translators: %s: nome da categoria. */
 		return sprintf( esc_html__( 'Artigos na categoria %s.', 'codice' ), single_cat_title( '', false ) );
 	}

@@ -334,15 +334,31 @@ $contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : home_url( '
 				<h2 id="axes-heading" class="home-axes__title">
 					<?php esc_html_e( 'Os campos em que esta publicação pensa', 'codice' ); ?>
 				</h2>
+				<p class="home-axes__intro">
+					<?php esc_html_e( 'Ecossistema organiza a leitura integrada. Conteúdo, comunicação, eventos e IA aparecem como camadas específicas dessa operação editorial mais ampla.', 'codice' ); ?>
+				</p>
 			</header>
 
 			<ul class="home-axes__list" role="list">
 				<?php
-				foreach ( codice_get_editorial_categories() as $editorial_cat ) :
+				$editorial_categories = codice_get_editorial_categories();
+				usort(
+					$editorial_categories,
+					static function ( $a, $b ) {
+						return (int) ! empty( $b['is_integrator'] ) <=> (int) ! empty( $a['is_integrator'] );
+					}
+				);
+
+				foreach ( $editorial_categories as $editorial_cat ) :
 					$term = codice_get_wp_term_by_slug( $editorial_cat['slug'] );
+					$is_integrator = ! empty( $editorial_cat['is_integrator'] );
 					?>
-					<li class="home-axes__item">
-						<div class="home-axes__card">
+					<li class="home-axes__item<?php echo $is_integrator ? ' home-axes__item--integrator' : ''; ?>">
+						<div class="home-axes__card<?php echo $is_integrator ? ' home-axes__card--integrator' : ''; ?>">
+
+							<p class="home-axes__role">
+								<?php echo esc_html( $is_integrator ? __( 'Eixo integrador', 'codice' ) : __( 'Camada do ecossistema', 'codice' ) ); ?>
+							</p>
 
 							<?php if ( $term ) : ?>
 								<h3 class="home-axes__name">
@@ -360,6 +376,12 @@ $contato_url  = $contato_page ? get_permalink( $contato_page->ID ) : home_url( '
 							<p class="home-axes__subtitle">
 								<?php echo esc_html( $editorial_cat['subtitle'] ); ?>
 							</p>
+
+							<?php if ( ! empty( $editorial_cat['relation'] ) ) : ?>
+								<p class="home-axes__relation">
+									<?php echo esc_html( $editorial_cat['relation'] ); ?>
+								</p>
+							<?php endif; ?>
 
 						</div><!-- .home-axes__card -->
 					</li>

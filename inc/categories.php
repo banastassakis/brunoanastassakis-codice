@@ -2,8 +2,9 @@
 /**
  * inc/categories.php — Categorias editoriais fixas da v1
  *
- * Define as cinco categorias canônicas do Códice (nome, slug, subtítulo)
- * e expõe helpers para consultar esses dados em qualquer template.
+ * Define as cinco categorias canônicas do Códice (nome, slug, subtítulo
+ * e descrição editorial) e expõe helpers para consultar esses dados em
+ * qualquer template.
  *
  * Regras:
  * - Não cria categorias no banco; o tema funciona com ou sem elas cadastradas.
@@ -21,36 +22,52 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Retorna o array das cinco categorias editoriais fixas da v1.
  *
- * Cada item tem: 'name', 'slug', 'subtitle'.
+ * Cada item tem: 'name', 'slug', 'subtitle', 'description',
+ * 'is_integrator' e 'relation'.
  *
- * @return array<int, array{name: string, slug: string, subtitle: string}>
+ * @return array<int, array{name: string, slug: string, subtitle: string, description: string, is_integrator: bool, relation: string}>
  */
 function codice_get_editorial_categories() {
 	return array(
 		array(
-			'name'     => __( 'Conteúdo', 'codice' ),
-			'slug'     => 'conteudo',
-			'subtitle' => __( 'Produto, estrutura e governança editorial.', 'codice' ),
+			'name'          => __( 'Conteúdo', 'codice' ),
+			'slug'          => 'conteudo',
+			'subtitle'      => __( 'Produto, estrutura e governança editorial.', 'codice' ),
+			'description'   => __( 'Conteúdo tratado como produto editorial: estrutura, acervo, governança, experiência, ciclo de vida e organização do conhecimento.', 'codice' ),
+			'is_integrator' => false,
+			'relation'      => __( 'Camada de produto, estrutura e governança dentro do ecossistema editorial.', 'codice' ),
 		),
 		array(
-			'name'     => __( 'Comunicação', 'codice' ),
-			'slug'     => 'comunicacao',
-			'subtitle' => __( 'Linguagem, posicionamento e construção de autoridade.', 'codice' ),
+			'name'          => __( 'Comunicação', 'codice' ),
+			'slug'          => 'comunicacao',
+			'subtitle'      => __( 'Linguagem, posicionamento e construção de autoridade.', 'codice' ),
+			'description'   => __( 'Comunicação como linguagem pública: posicionamento, reputação, autoridade, marca, canais e clareza em mercados complexos.', 'codice' ),
+			'is_integrator' => false,
+			'relation'      => __( 'Camada de linguagem, canais e percepção dentro do ecossistema editorial.', 'codice' ),
 		),
 		array(
-			'name'     => __( 'Eventos', 'codice' ),
-			'slug'     => 'eventos',
-			'subtitle' => __( 'Curadoria, formatos e circulação de ideias.', 'codice' ),
+			'name'          => __( 'Eventos', 'codice' ),
+			'slug'          => 'eventos',
+			'subtitle'      => __( 'Curadoria, formatos e circulação de ideias.', 'codice' ),
+			'description'   => __( 'Eventos como formatos editoriais e comunicacionais: curadoria, experiência, pauta, audiência e circulação de ideias.', 'codice' ),
+			'is_integrator' => false,
+			'relation'      => __( 'Camada de presença, curadoria e circulação dentro do ecossistema editorial.', 'codice' ),
 		),
 		array(
-			'name'     => __( 'IA', 'codice' ),
-			'slug'     => 'ia',
-			'subtitle' => __( 'Automação, inteligência operacional e fluxos de conteúdo.', 'codice' ),
+			'name'          => __( 'IA', 'codice' ),
+			'slug'          => 'ia',
+			'subtitle'      => __( 'Automação, inteligência operacional e fluxos de conteúdo.', 'codice' ),
+			'description'   => __( 'IA como camada operacional: automação, pesquisa, organização, produção, análise, documentação e reaproveitamento de conteúdo.', 'codice' ),
+			'is_integrator' => false,
+			'relation'      => __( 'Camada de automação, pesquisa e inteligência operacional dentro do ecossistema editorial.', 'codice' ),
 		),
 		array(
-			'name'     => __( 'Ecossistema', 'codice' ),
-			'slug'     => 'ecossistema',
-			'subtitle' => __( 'Integração entre conteúdo, comunicação, canais, eventos, IA e operação.', 'codice' ),
+			'name'          => __( 'Ecossistema', 'codice' ),
+			'slug'          => 'ecossistema',
+			'subtitle'      => __( 'Integração entre conteúdo, comunicação, canais, eventos, IA e operação.', 'codice' ),
+			'description'   => __( 'Categoria-síntese sobre a integração entre conteúdo, comunicação, eventos, IA, canais, pessoas, decisões, fluxos e operação editorial.', 'codice' ),
+			'is_integrator' => true,
+			'relation'      => __( 'Eixo integrador que observa como as demais camadas funcionam em conjunto.', 'codice' ),
 		),
 	);
 }
@@ -70,7 +87,7 @@ function codice_get_category_subtitle( $slug ) {
  * Retorna a definição completa de uma categoria pelo slug.
  *
  * @param string $slug Slug da categoria.
- * @return array{name: string, slug: string, subtitle: string}|null Definição ou null.
+ * @return array{name: string, slug: string, subtitle: string, description: string, is_integrator: bool, relation: string}|null Definição ou null.
  */
 function codice_get_category_by_slug( $slug ) {
 	foreach ( codice_get_editorial_categories() as $cat ) {
@@ -79,6 +96,25 @@ function codice_get_category_by_slug( $slug ) {
 		}
 	}
 	return null;
+}
+
+/**
+ * Retorna as quatro categorias que funcionam como camadas do ecossistema.
+ *
+ * A relação é editorial, visual e estrutural na interface; as categorias
+ * permanecem top-level no WordPress.
+ *
+ * @return array<int, array{name: string, slug: string, subtitle: string, description: string, is_integrator: bool, relation: string}>
+ */
+function codice_get_ecosystem_layer_categories() {
+	return array_values(
+		array_filter(
+			codice_get_editorial_categories(),
+			static function ( $cat ) {
+				return empty( $cat['is_integrator'] );
+			}
+		)
+	);
 }
 
 /**
