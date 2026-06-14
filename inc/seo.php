@@ -73,6 +73,11 @@ function codice_get_meta_description() {
 		return esc_html__( 'Este espaço está sendo preparado. Enquanto isso, os canais diretos seguem disponíveis.', 'codice' );
 	}
 
+	if ( is_front_page() ) {
+		$blog_description = codice_normalize_meta_description( get_bloginfo( 'description' ) );
+		return $blog_description ? $blog_description : codice_get_default_meta_description();
+	}
+
 	if ( is_singular() ) {
 		if ( has_excerpt() ) {
 			return codice_normalize_meta_description( get_the_excerpt() );
@@ -91,11 +96,6 @@ function codice_get_meta_description() {
 		}
 
 		return codice_get_default_meta_description();
-	}
-
-	if ( is_front_page() ) {
-		$blog_description = codice_normalize_meta_description( get_bloginfo( 'description' ) );
-		return $blog_description ? $blog_description : codice_get_default_meta_description();
 	}
 
 	if ( is_home() ) {
@@ -248,13 +248,25 @@ function codice_document_title_separator( $sep ) {
 add_filter( 'document_title_separator', 'codice_document_title_separator' );
 
 /**
+ * Remove o canonical nativo do WordPress quando o tema emite o canonical.
+ */
+function codice_disable_core_rel_canonical() {
+	if ( codice_is_seo_plugin_active() ) {
+		return;
+	}
+
+	remove_action( 'wp_head', 'rel_canonical' );
+}
+add_action( 'wp_head', 'codice_disable_core_rel_canonical', 0 );
+
+/**
  * Ajusta robots meta para contextos que nao devem ser indexados.
  *
  * @param array $robots Diretivas do WordPress.
  * @return array Diretivas filtradas.
  */
 function codice_filter_robots_meta( $robots ) {
-	if ( ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) || is_search() ) {
+	if ( ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) || is_search() || is_404() ) {
 		unset( $robots['index'] );
 		$robots['noindex'] = true;
 		$robots['follow']  = true;

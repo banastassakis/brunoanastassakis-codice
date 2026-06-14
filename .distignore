@@ -16,6 +16,7 @@ projetos-ia/
 output/
 test-results/
 playwright-report/
+.playwright-cli/
 bin/
 node_modules/
 vendor/

@@ -41,7 +41,7 @@ function codice_get_linkedin_url() {
  * @return string WhatsApp URL, or empty when disabled.
  */
 function codice_get_whatsapp_url() {
-	$url = apply_filters( 'codice_whatsapp_url', 'https://wa.me/5521986957214' );
+	$url = apply_filters( 'codice_whatsapp_url', '' );
 
 	return esc_url_raw( $url );
 }
