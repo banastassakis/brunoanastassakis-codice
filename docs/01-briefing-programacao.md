@@ -68,7 +68,7 @@ brunoanastassakis-codice/              ← repo Git = pasta do tema (wp-content/
 │   ├── 00-arquitetura.md
 │   ├── 01-briefing-programacao.md     ← este arquivo
 │   ├── 02-codice-tokens.md
-│   ├── codice-designsystem-v6.html    ← referência visual completa
+│   ├── codice-designsystem.html       ← referência visual completa
 │   └── referencia/                    ← fonte factual (fase de conteúdo; fora do build)
 │       ├── BRUNO_ANASTASSAKIS_CV_2026_PT.docx
 │       ├── BRUNO_ANASTASSAKIS_CV_2026_EN.docx

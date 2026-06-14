@@ -302,7 +302,7 @@ Tokens concretos do Códice v6 que entram diretamente no tema. Cores que não or
 
 **Acessibilidade (regra de composição, não camada posterior):** foco com outline Petroleum de 2px e offset visível; links em texto corrido distinguíveis por sublinhado; contraste preservado entre Graphite, Slate, Pencil, Bone e Vellum; movimento respeita `prefers-reduced-motion`; alt text obrigatório em imagem informativa, descrevendo tema e tratamento retroprint; caption explica a função editorial sem repetir o título da página.
 
-> O arquivo de referência (`codice-designsystem-v6.html`) traz imagens embutidas em base64. Pelo próprio Códice, elas são **diagnóstico do que não reutilizar** — não são assets, paleta obrigatória nem base compositiva. As imagens do site devem ser geradas de novo, por descrição operacional, dentro da linguagem retroprint. O Códice também traz um prompt-base editável e um checklist de geração; use-os como insumo direto ao produzir imagens.
+> O arquivo de referência (`codice-designsystem.html`) traz imagens embutidas em base64. Pelo próprio Códice, elas são **diagnóstico do que não reutilizar** — não são assets, paleta obrigatória nem base compositiva. As imagens do site devem ser geradas de novo, por descrição operacional, dentro da linguagem retroprint. O Códice também traz um prompt-base editável e um checklist de geração; use-os como insumo direto ao produzir imagens.
 
 ---
 
@@ -464,7 +464,7 @@ Não criar séries nem temas como seções públicas na v1. Séries podem existi
 
 Este documento encerra a **arquitetura**. O passo imediato é a programação do tema (Marco 1, com placeholder). As demais fases são projetos separados, cada um com fluxo próprio:
 
-1. **Design e programação do tema WordPress** — passo imediato. Recebe este documento como insumo direto; os tokens do Códice v6 estão consolidados na seção 11, e o arquivo `codice-designsystem-v6.html` permanece como referência completa de componentes e exemplos.
+1. **Design e programação do tema WordPress** — passo imediato. Recebe este documento como insumo direto; os tokens do Códice v6 estão consolidados na seção 11, e o arquivo `codice-designsystem.html` permanece como referência completa de componentes e exemplos.
 2. **Calendário editorial** — projeto de IA à parte, com fluxo próprio, para planejar e gerir os artigos necessários.
 3. **Produção de conteúdo** — projeto à parte, para escrever as pautas planejadas.
 4. **Popular o site e lançar** — substituir placeholders pelo conteúdo real e divulgar quando o gatilho de lançamento for atingido.

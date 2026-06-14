@@ -1,6 +1,6 @@
 # Tokens do Códice v6 — referência visual
 
-Extração dos tokens do Design System Códice v6 para uso direto no tema. Fonte: `docs/codice-designsystem-v6.html`. Estes valores são a lei visual do projeto: nenhuma cor, fonte ou espaçamento fora daqui.
+Extração dos tokens do Design System Códice v6 para uso direto no tema. Fonte: `docs/codice-designsystem.html`. Estes valores são a lei visual do projeto: nenhuma cor, fonte ou espaçamento fora daqui.
 
 ## Paleta de interface (UI)
 

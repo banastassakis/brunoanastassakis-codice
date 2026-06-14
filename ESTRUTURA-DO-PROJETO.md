@@ -29,7 +29,7 @@ brunoanastassakis-codice/                      ← repo Git = pasta do tema
 │   ├── 00-arquitetura.md                      [VOCÊ]  (renomear o doc de arquitetura)
 │   ├── 01-briefing-programacao.md             [VOCÊ]
 │   ├── 02-codice-tokens.md                    [VOCÊ]
-│   ├── codice-designsystem-v6.html            [VOCÊ]  (o upload que você já tem)
+│   ├── codice-designsystem.html               [VOCÊ]  (o upload que você já tem)
 │   └── referencia/                            [VOCÊ]  fonte factual; fora do build
 │       ├── BRUNO_ANASTASSAKIS_CV_2026_PT.docx
 │       ├── BRUNO_ANASTASSAKIS_CV_2026_EN.docx

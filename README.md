@@ -9,7 +9,7 @@ Este repositório **é a pasta do tema** (`wp-content/themes/brunoanastassakis-c
 - `docs/00-arquitetura.md` — arquitetura editorial e estrutural (o quê e por quê).
 - `docs/01-briefing-programacao.md` — especificação técnica de programação (como).
 - `docs/02-codice-tokens.md` — tokens visuais (cores, tipografia, layout).
-- `docs/codice-designsystem-v6.html` — referência visual completa.
+- `docs/codice-designsystem.html` — referência visual completa.
 - `docs/referencia/` — CV (PT/EN) e LinkedIn (PT/EN). Fonte factual **só para a fase de conteúdo** (Sobre/bios); não usada na fase placeholder; fora do build de produção.
 
 ## Orquestração de IA (Antigravity)

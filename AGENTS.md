@@ -10,7 +10,7 @@ Documentos de referência (leia antes de agir):
 - `docs/00-arquitetura.md` — arquitetura editorial e estrutural (o quê e por quê).
 - `docs/01-briefing-programacao.md` — especificação técnica (como).
 - `docs/02-codice-tokens.md` — tokens visuais (cores, tipografia, layout).
-- `docs/codice-designsystem-v6.html` — referência visual completa.
+- `docs/codice-designsystem.html` — referência visual completa.
 
 Material de referência factual (`docs/referencia/`): CV (PT/EN) e perfis de LinkedIn (PT/EN) de Bruno. **São fonte de verdade factual apenas para a fase de conteúdo** (página Sobre, bios). Regras de uso:
 - **Não usar na fase atual (Marco 1, placeholder).** O tema não puxa nem exibe dados desses arquivos agora.
