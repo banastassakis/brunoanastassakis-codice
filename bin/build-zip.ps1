@@ -50,6 +50,7 @@ $ForbiddenZipEntries = @(
 	'README.md',
 	'ESTRUTURA-DO-PROJETO.md',
 	'CHECKLIST-INSTALACAO.md',
+	'AUDITORIA-TECNICA.md',
 	'projetos-ia/',
 	'output/',
 	'bin/',
