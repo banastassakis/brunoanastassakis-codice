@@ -17,6 +17,8 @@ output/
 test-results/
 playwright-report/
 .playwright-cli/
+_zip-test/
+_zip-*/
 bin/
 node_modules/
 vendor/
