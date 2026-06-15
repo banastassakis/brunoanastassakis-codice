@@ -1,0 +1,103 @@
+/*
+ * assets/css/seo-admin.css - Estilos minimos do SEO admin do tema Codice.
+ *
+ * Apenas organizacao visual leve dos campos. Sem dependencias, prefixo
+ * proprio (codice-seo-) para nao colidir com o admin do WordPress.
+ *
+ * @package codice
+ */
+
+.codice-seo__group {
+	margin: 0 0 1.25em;
+	padding: 0 0 1em;
+	border: 0;
+	border-bottom: 1px solid var(--margin);
+}
+
+.codice-seo__group:last-child {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+
+.codice-seo__legend {
+	margin: 0 0 0.5em;
+	padding: 0;
+	font-weight: 600;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--graphite);
+}
+
+.codice-seo-field {
+	margin: 0 0 1em;
+}
+
+.codice-seo-field__label {
+	display: block;
+	margin: 0 0 0.25em;
+	font-weight: 600;
+}
+
+.codice-seo-field__input {
+	width: 100%;
+	max-width: 100%;
+}
+
+textarea.codice-seo-field__input {
+	min-height: 3.5em;
+}
+
+.codice-seo-field__help {
+	display: block;
+	margin-top: 0.25em;
+	color: var(--pencil);
+	font-size: 12px;
+}
+
+.codice-seo-field__counter {
+	display: inline-block;
+	margin-top: 0.15em;
+	color: var(--pencil);
+	font-size: 11px;
+	font-variant-numeric: tabular-nums;
+}
+
+.codice-seo-field__counter.is-over {
+	color: var(--petroleum);
+	font-weight: 600;
+}
+
+/* Campo de imagem */
+.codice-seo-image {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75em;
+	flex-wrap: wrap;
+}
+
+.codice-seo-image__preview img {
+	display: block;
+	max-width: 120px;
+	height: auto;
+	border: 1px solid var(--margin);
+	border-radius: var(--radius);
+}
+
+.codice-seo-image__actions {
+	display: flex;
+	gap: 0.5em;
+	align-items: center;
+}
+
+/* Ajustes para o contexto de termos (categorias) */
+.codice-seo-term__legend {
+	margin: 1.5em 0 0.25em;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.codice-seo-term__row th {
+	padding-top: 1em;
+}

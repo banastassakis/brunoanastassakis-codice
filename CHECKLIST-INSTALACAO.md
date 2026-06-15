@@ -92,3 +92,14 @@ Se `/sobre` ou `/contato` retornarem 404, verificar primeiro se as paginas exist
 - [ ] Manter conteudo real para marco posterior.
 - [ ] Nao inventar conteudo profissional, clientes, metricas, cargos, resultados, eventos ou ferramentas.
 - [ ] Nao nomear empregadores na pagina Sobre.
+
+## 8. Controles nativos do tema (admin)
+
+Recursos nativos do tema, sem plugin. Todos opcionais e com fallback seguro quando em branco.
+
+- [ ] SEO em posts e paginas: metabox `SEO (Códice)` no editor, com SEO basico (titulo, meta description, canonical), Indexacao (robots index/follow), Open Graph e Twitter/X.
+- [ ] SEO em categorias: campos equivalentes em `Posts -> Categorias`, ao editar uma categoria.
+- [ ] SEO em midia: campos editoriais em `Midia` ao editar um anexo. O campo nativo de Texto alternativo continua prioritario para o `alt`; o "alt recomendado" e apenas sugestao.
+- [ ] Canonical: deixar em branco usa a URL atual; preencher define a URL preferencial.
+- [ ] Ocultar titulo em paginas: caixa `Ocultar título no layout público` no metabox `Opções da página`. Mantem um `<h1>` acessivel (screen-reader) e nao afeta posts.
+- [ ] Cabecalho fixo (sticky): o cabecalho global acompanha o scroll no site publico; a tela de manutencao nao exibe o cabecalho global.

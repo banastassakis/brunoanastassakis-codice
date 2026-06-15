@@ -73,6 +73,14 @@ function codice_get_meta_description() {
 		return esc_html__( 'Este espaço está sendo preparado. Enquanto isso, os canais diretos seguem disponíveis.', 'codice' );
 	}
 
+	// Override editorial via campo customizado (post/categoria), quando preenchido.
+	if ( function_exists( 'codice_seo_custom_description' ) ) {
+		$custom_description = codice_seo_custom_description();
+		if ( '' !== $custom_description ) {
+			return codice_normalize_meta_description( $custom_description );
+		}
+	}
+
 	if ( is_front_page() ) {
 		$blog_description = codice_normalize_meta_description( get_bloginfo( 'description' ) );
 		return $blog_description ? $blog_description : codice_get_default_meta_description();
@@ -139,6 +147,14 @@ function codice_get_meta_description() {
 function codice_get_canonical_url() {
 	if ( function_exists( 'codice_is_maintenance_request' ) && codice_is_maintenance_request() ) {
 		return home_url( '/manutencao/' );
+	}
+
+	// Override editorial via campo customizado (post/categoria), quando preenchido.
+	if ( function_exists( 'codice_seo_custom_canonical' ) ) {
+		$custom_canonical = codice_seo_custom_canonical();
+		if ( '' !== $custom_canonical ) {
+			return $custom_canonical;
+		}
 	}
 
 	if ( is_singular() ) {
@@ -221,6 +237,16 @@ function codice_filter_document_title_parts( $title ) {
 		return $title;
 	}
 
+	// Override editorial via campo customizado (post/categoria), quando preenchido.
+	if ( function_exists( 'codice_seo_custom_title' ) ) {
+		$custom_title = codice_seo_custom_title();
+		if ( '' !== $custom_title ) {
+			$title['title'] = $custom_title;
+			unset( $title['site'] );
+			return $title;
+		}
+	}
+
 	if ( is_front_page() ) {
 		$title['title'] = get_bloginfo( 'name' );
 		unset( $title['site'] );
@@ -278,6 +304,29 @@ function codice_filter_robots_meta( $robots ) {
 		unset( $robots['index'] );
 		$robots['noindex'] = true;
 		$robots['follow']  = true;
+
+		return $robots;
+	}
+
+	// Overrides editoriais por post/categoria, via campos customizados.
+	if ( function_exists( 'codice_seo_object_meta' ) ) {
+		$index_override = codice_seo_object_meta( '_codice_robots_index' );
+		if ( 'noindex' === $index_override ) {
+			unset( $robots['index'] );
+			$robots['noindex'] = true;
+		} elseif ( 'index' === $index_override ) {
+			unset( $robots['noindex'] );
+			$robots['index'] = true;
+		}
+
+		$follow_override = codice_seo_object_meta( '_codice_robots_follow' );
+		if ( 'nofollow' === $follow_override ) {
+			unset( $robots['follow'] );
+			$robots['nofollow'] = true;
+		} elseif ( 'follow' === $follow_override ) {
+			unset( $robots['nofollow'] );
+			$robots['follow'] = true;
+		}
 	}
 
 	return $robots;
@@ -299,6 +348,15 @@ function codice_add_seo_meta_tags() {
 	$site_name   = get_bloginfo( 'name' );
 	$og_type     = is_single() ? 'article' : 'website';
 
+	// Resolve Open Graph e Twitter/X com overrides editoriais e fallback seguro.
+	$has_helpers    = function_exists( 'codice_seo_og_title' );
+	$og_title       = $has_helpers ? codice_seo_og_title( $title ) : $title;
+	$og_description = $has_helpers ? codice_seo_og_description( $description ) : $description;
+	$og_image       = $has_helpers ? codice_seo_og_image( $image ) : $image;
+	$tw_title       = $has_helpers ? codice_seo_twitter_title( $og_title ) : $og_title;
+	$tw_description = $has_helpers ? codice_seo_twitter_description( $og_description ) : $og_description;
+	$tw_image       = $has_helpers ? codice_seo_twitter_image( $og_image ) : $og_image;
+
 	echo "\n<!-- SEO Codice -->\n";
 
 	if ( $description ) {
@@ -310,10 +368,10 @@ function codice_add_seo_meta_tags() {
 	}
 
 	echo '<meta property="og:type" content="' . esc_attr( $og_type ) . '">' . "\n";
-	echo '<meta property="og:title" content="' . esc_attr( $title ) . '">' . "\n";
+	echo '<meta property="og:title" content="' . esc_attr( $og_title ) . '">' . "\n";
 
-	if ( $description ) {
-		echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";
+	if ( $og_description ) {
+		echo '<meta property="og:description" content="' . esc_attr( $og_description ) . '">' . "\n";
 	}
 
 	if ( $url ) {
@@ -322,19 +380,19 @@ function codice_add_seo_meta_tags() {
 
 	echo '<meta property="og:site_name" content="' . esc_attr( $site_name ) . '">' . "\n";
 
-	if ( $image ) {
-		echo '<meta property="og:image" content="' . esc_url( $image ) . '">' . "\n";
+	if ( $og_image ) {
+		echo '<meta property="og:image" content="' . esc_url( $og_image ) . '">' . "\n";
 	}
 
-	echo '<meta name="twitter:card" content="' . esc_attr( $image ? 'summary_large_image' : 'summary' ) . '">' . "\n";
-	echo '<meta name="twitter:title" content="' . esc_attr( $title ) . '">' . "\n";
+	echo '<meta name="twitter:card" content="' . esc_attr( $tw_image ? 'summary_large_image' : 'summary' ) . '">' . "\n";
+	echo '<meta name="twitter:title" content="' . esc_attr( $tw_title ) . '">' . "\n";
 
-	if ( $description ) {
-		echo '<meta name="twitter:description" content="' . esc_attr( $description ) . '">' . "\n";
+	if ( $tw_description ) {
+		echo '<meta name="twitter:description" content="' . esc_attr( $tw_description ) . '">' . "\n";
 	}
 
-	if ( $image ) {
-		echo '<meta name="twitter:image" content="' . esc_url( $image ) . '">' . "\n";
+	if ( $tw_image ) {
+		echo '<meta name="twitter:image" content="' . esc_url( $tw_image ) . '">' . "\n";
 	}
 
 	echo "<!-- /SEO Codice -->\n\n";

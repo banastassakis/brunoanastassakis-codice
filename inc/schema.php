@@ -137,11 +137,19 @@ function codice_schema_get_blog_posting( $person_id ) {
 	$description = function_exists( 'codice_get_meta_description' ) ? codice_get_meta_description() : '';
 	$permalink   = get_permalink();
 	$permalink_id = untrailingslashit( $permalink );
+	$headline    = get_the_title();
+
+	if ( function_exists( 'codice_seo_custom_title' ) ) {
+		$seo_headline = codice_seo_custom_title();
+		if ( '' !== $seo_headline ) {
+			$headline = $seo_headline;
+		}
+	}
 
 	$article = array(
 		'@type'            => 'BlogPosting',
 		'@id'              => $permalink_id . '#article',
-		'headline'         => get_the_title(),
+		'headline'         => $headline,
 		'description'      => $description,
 		'datePublished'    => get_the_date( 'c' ),
 		'dateModified'     => get_the_modified_date( 'c' ),
@@ -157,11 +165,17 @@ function codice_schema_get_blog_posting( $person_id ) {
 		'inLanguage'       => 'pt-BR',
 	);
 
+	// Imagem coerente com SEO: imagem destacada e, na ausencia dela,
+	// o override de imagem Open Graph. Sem chave image quando nao houver imagem.
+	$article_image = '';
 	if ( has_post_thumbnail() ) {
-		$image = get_the_post_thumbnail_url( get_the_ID(), 'full' );
-		if ( $image ) {
-			$article['image'] = $image;
-		}
+		$article_image = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+	} elseif ( function_exists( 'codice_seo_image_url_from_meta' ) ) {
+		$article_image = codice_seo_image_url_from_meta( '_codice_og_image_id', 'full' );
+	}
+
+	if ( $article_image ) {
+		$article['image'] = $article_image;
 	}
 
 	$categories = get_the_category();

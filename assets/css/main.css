@@ -103,6 +103,17 @@ html {
 	font-size:                100%; /* 16px base */
 	-webkit-text-size-adjust: 100%;
 	scroll-behavior:          smooth;
+
+	/*
+	 * Altura aproximada do cabeçalho sticky. Centralizada aqui (derivada
+	 * dos tokens visuais; não é um valor cromático/tipográfico do Códice).
+	 * Usada por scroll-padding-top e por scroll-margin-top de âncoras para
+	 * que o skip-link e links internos não fiquem ocultos sob o header fixo.
+	 */
+	--codice-header-h: 5rem;
+
+	/* Compensa o cabeçalho sticky ao saltar para âncoras (#conteudo etc.). */
+	scroll-padding-top: var(--codice-header-h);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -118,8 +129,12 @@ body {
 	font-size:        1rem;
 	line-height:      1.65;
 
-	/* Previne overflow horizontal */
-	overflow-x:       hidden;
+	/*
+	 * Previne overflow horizontal. Usa 'clip' em vez de 'hidden' porque
+	 * 'hidden' transforma o body em contêiner de rolagem e quebraria o
+	 * position: sticky do cabeçalho. 'clip' recorta sem criar scroll container.
+	 */
+	overflow-x:       clip;
 	min-height:       100vh;
 
 	/* Empilhamento completo: header / main / footer */
@@ -660,6 +675,16 @@ label {
    ══════════════════════════════════════════════════════════════════════════ */
 
 .site-header {
+	/*
+	 * Cabeçalho global fixo no topo durante o scroll. Sóbrio e discreto:
+	 * fundo papel (Bone) e filete fino inferior, dentro do sistema Códice.
+	 * A tela de manutenção tem head/body próprios e não renderiza este
+	 * cabeçalho, então o sticky nunca se aplica lá.
+	 */
+	position:      sticky;
+	top:           0;
+	z-index:       100;
+	background-color: var(--bone);
 	border-bottom: 1px solid var(--rule);
 	padding-block: 1.25rem;
 }
@@ -1516,6 +1541,15 @@ figure img {
 
 /* ── 880px — empilha header, componentes e grade para 1 coluna ──────────── */
 @media (max-width: 880px) {
+	/*
+	 * Com o cabeçalho empilhado (nome + navegação), a altura cresce;
+	 * aumenta o offset de âncora para o skip-link/links internos não
+	 * ficarem ocultos sob o header sticky.
+	 */
+	html {
+		--codice-header-h: 8.5rem;
+	}
+
 	/* Header empilhado */
 	.site-header__inner {
 		flex-direction: column;

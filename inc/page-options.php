@@ -30,7 +30,7 @@ add_action( 'add_meta_boxes_page', 'codice_register_page_options_metabox' );
  * @param WP_Post $post Current post object.
  */
 function codice_render_page_options_metabox( $post ) {
-	$hide_title = get_post_meta( $post->ID, 'codice_hide_page_title', true );
+	$hide_title = get_post_meta( $post->ID, '_codice_hide_page_title', true );
 
 	wp_nonce_field( 'codice_save_page_options', 'codice_page_options_nonce' );
 	?>
@@ -43,7 +43,7 @@ function codice_render_page_options_metabox( $post ) {
 				value="1"
 				<?php checked( '1', $hide_title ); ?>
 			>
-			<?php esc_html_e( 'Esconder título visual no layout', 'codice' ); ?>
+			<?php esc_html_e( 'Ocultar título no layout público', 'codice' ); ?>
 		</label>
 	</p>
 	<p class="description">
@@ -86,7 +86,7 @@ function codice_save_page_options( $post_id, $post ) {
 
 	$hide_title = isset( $_POST['codice_hide_page_title'] ) ? '1' : '0';
 
-	update_post_meta( $post_id, 'codice_hide_page_title', $hide_title );
+	update_post_meta( $post_id, '_codice_hide_page_title', $hide_title );
 }
 add_action( 'save_post_page', 'codice_save_page_options', 10, 2 );
 
@@ -109,5 +109,5 @@ function codice_should_hide_page_title( $post_id = null ) {
 		return false;
 	}
 
-	return '1' === get_post_meta( $post_id, 'codice_hide_page_title', true );
+	return '1' === get_post_meta( $post_id, '_codice_hide_page_title', true );
 }

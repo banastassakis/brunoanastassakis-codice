@@ -21,5 +21,10 @@ require_once get_template_directory() . '/inc/site-config.php';
 require_once get_template_directory() . '/inc/contact-form.php';
 require_once get_template_directory() . '/inc/page-options.php';
 require_once get_template_directory() . '/inc/maintenance.php';
+require_once get_template_directory() . '/inc/seo-helpers.php';
 require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/schema.php';
+
+if ( is_admin() ) {
+	require_once get_template_directory() . '/inc/seo-admin.php';
+}
