@@ -1,6 +1,5 @@
 <?php
 /**
- * Template Name: Contato
  * page-contato.php — Página Contato
  *
  * Apresenta o formulário de contato customizado (Nome, E-mail, Contexto, Mensagem),

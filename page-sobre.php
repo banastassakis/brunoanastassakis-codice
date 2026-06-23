@@ -1,6 +1,5 @@
 <?php
 /**
- * Template Name: Sobre
  * page-sobre.php — Página Sobre
  *
  * Narrativa em primeira pessoa sobre o autor, sua tese de posicionamento,

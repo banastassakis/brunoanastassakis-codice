@@ -40,9 +40,14 @@ $search_query = get_search_query();
 				<h1 class="archive-header__title">
 					<?php
 					printf(
-						/* translators: %s: termo buscado pelo usuário */
-						esc_html__( 'Resultados para: %s', 'codice' ),
-						'<em>' . esc_html( $search_query ) . '</em>'
+						wp_kses(
+							/* translators: %s: termo buscado pelo usuário */
+							__( 'Resultados para: <em>%s</em>', 'codice' ),
+							array(
+								'em' => array(),
+							)
+						),
+						esc_html( $search_query )
 					);
 					?>
 				</h1>

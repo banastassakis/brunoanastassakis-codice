@@ -20,8 +20,8 @@ $site_name     = get_bloginfo( 'name' );
 $contact_email = function_exists( 'codice_get_contact_email' ) ? codice_get_contact_email() : get_option( 'admin_email' );
 $linkedin_url  = function_exists( 'codice_get_linkedin_url' ) ? codice_get_linkedin_url() : '';
 $whatsapp_url  = function_exists( 'codice_get_whatsapp_url' ) ? codice_get_whatsapp_url() : '';
-$visual_path   = get_template_directory() . '/assets/img/maintenance-retroprint.png';
-$visual_url    = get_template_directory_uri() . '/assets/img/maintenance-retroprint.png';
+$visual_path   = get_template_directory() . '/assets/img/maintenance-retroprint.jpg';
+$visual_url    = get_template_directory_uri() . '/assets/img/maintenance-retroprint.jpg';
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -105,8 +105,8 @@ $visual_url    = get_template_directory_uri() . '/assets/img/maintenance-retropr
 			<figure class="maintenance-visual">
 				<img
 					src="<?php echo esc_url( $visual_url ); ?>"
-					width="1024"
-					height="1536"
+					width="900"
+					height="1350"
 					alt="<?php esc_attr_e( 'Composição editorial retroprint com camadas de papel, texturas e formas gráficas, sugerindo um espaço em preparação.', 'codice' ); ?>"
 					loading="eager"
 					decoding="async"

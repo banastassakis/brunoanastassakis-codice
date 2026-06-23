@@ -93,12 +93,6 @@
    2. BASE GLOBAL
    ══════════════════════════════════════════════════════════════════════════ */
 
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
 html {
 	font-size:                100%; /* 16px base */
 	-webkit-text-size-adjust: 100%;

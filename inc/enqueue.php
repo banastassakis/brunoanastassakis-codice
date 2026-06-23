@@ -52,7 +52,7 @@ function codice_enqueue_assets() {
 	wp_enqueue_style(
 		'codice-style',
 		get_stylesheet_uri(),
-		array( 'codice-tokens' ),
+		array( 'codice-main' ),
 		file_exists( $style_css_path ) ? filemtime( $style_css_path ) : '1.0.0'
 	);
 

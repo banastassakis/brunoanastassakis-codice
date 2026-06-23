@@ -37,8 +37,7 @@
 
 	/*
 	 * Serif: títulos, ledes, nomes, citações, aberturas de seção.
-	 * Fontes self-hosted (.woff2) serão declaradas via @font-face na Etapa 2.
-	 * Até lá, os fallbacks do sistema garantem a renderização.
+	 * Fontes self-hosted (.woff2) são declaradas via @font-face em main.css.
 	 */
 	--serif: "Newsreader", "Source Serif Pro", Georgia, "Times New Roman", serif;
 

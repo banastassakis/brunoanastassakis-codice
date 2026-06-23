@@ -113,6 +113,7 @@ if ( empty( $related_posts ) ) {
 	<ul class="related-posts__list posts-list" role="list">
 		<?php
 		foreach ( $related_posts as $related_post ) :
+			$GLOBALS['post'] = $related_post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- required for setup_postdata() to work with template tags.
 			setup_postdata( $related_post );
 			?>
 			<li class="posts-list__item related-posts__item">
