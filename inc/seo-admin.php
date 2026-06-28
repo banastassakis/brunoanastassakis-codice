@@ -104,6 +104,16 @@ function codice_seo_field_groups() {
 				),
 			),
 		),
+		'editorial' => array(
+			'label'  => esc_html__( 'Editorial', 'codice' ),
+			'fields' => array(
+				'_codice_seo_focus_keyword' => array(
+					'type'  => 'text',
+					'label' => esc_html__( 'Palavra-chave foco', 'codice' ),
+					'help'  => esc_html__( 'Termo principal para fins editoriais. Não gera tags públicas.', 'codice' ),
+				),
+			),
+		),
 	);
 }
 
@@ -509,13 +519,20 @@ function codice_seo_attachment_save( $post, $attachment ) {
 		return $post;
 	}
 
+	$nonce_verified = false;
 	if (
-		! isset( $attachment['codice_seo_attachment_nonce'] ) ||
-		! wp_verify_nonce(
+		isset( $attachment['codice_seo_attachment_nonce'] ) &&
+		wp_verify_nonce(
 			sanitize_text_field( wp_unslash( $attachment['codice_seo_attachment_nonce'] ) ),
 			'codice_seo_save_attachment'
 		)
 	) {
+		$nonce_verified = true;
+	} elseif ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_POST['action'] ) && in_array( $_POST['action'], array( 'save-attachment', 'save-attachment-compat' ), true ) ) {
+		$nonce_verified = true;
+	}
+
+	if ( ! $nonce_verified ) {
 		return $post;
 	}
 

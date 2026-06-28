@@ -33,6 +33,7 @@ function codice_seo_meta_keys() {
 		'_codice_twitter_title',
 		'_codice_twitter_description',
 		'_codice_twitter_image_id',
+		'_codice_seo_focus_keyword',
 	);
 }
 
